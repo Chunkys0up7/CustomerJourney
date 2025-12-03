@@ -1,0 +1,41 @@
+id: atom-cust-001-inquiry
+name: Initial Loan Inquiry
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+description: Borrower initiates loan inquiry through website or phone, providing basic
+  property and financial information
+estimated_duration_minutes: 10
+customer_experience:
+  effort_level: low
+  emotional_impact: positive
+  nps_impact: 5
+  pain_points: []
+  delight_opportunities:
+  - Quick response time
+  - Personalized greeting
+dependencies:
+  requires: []
+  enables:
+  - atom-cust-002-consent-credit
+  - atom-bo-001-assign-lo
+data_outputs:
+- field: property_type
+  destination: storage
+  format: string
+- field: loan_amount
+  destination: storage
+  format: number
+- field: contact_info
+  destination: storage
+  format: object
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.423735'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.423755'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

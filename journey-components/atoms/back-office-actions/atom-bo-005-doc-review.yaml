@@ -1,0 +1,29 @@
+id: atom-bo-005-doc-review
+name: Document Review and Classification
+category: document_review
+stage: back_stage
+actor: processor
+channel: web
+description: Processor reviews uploaded docs for legibility, completeness, and classification
+estimated_duration_minutes: 45
+sla_hours: 24
+sla_unit: hours
+process_metrics:
+  automation_level: semi_automated
+  error_rate_percent: 10.0
+  rework_rate_percent: 25.0
+  bottleneck_risk: high
+dependencies:
+  requires:
+  - atom-cust-006-doc-upload
+  enables:
+  - atom-bo-006-le-preparation
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.446339'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.446342'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

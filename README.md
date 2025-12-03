@@ -70,25 +70,37 @@ Auto-detects:
 customer-journey/
 ├── journey-components/
 │   ├── atoms/
-│   │   ├── customer-actions/      # Customer-facing touchpoints
-│   │   ├── back-office-actions/   # Internal operations
-│   │   └── system-actions/        # Automated processes
-│   ├── modules/                   # Workflow compositions
+│   │   ├── customer-actions/      # Customer-facing touchpoints (front-stage)
+│   │   ├── back-office-actions/   # Internal operations (back-stage)
+│   │   └── system-actions/        # Automated processes (system)
+│   ├── modules/                   # Workflow compositions (DIDs)
 │   ├── phases/                    # Journey stages
 │   └── journeys/                  # Complete end-to-end journeys
+├── ai-engine/
+│   ├── atom-generator/
+│   │   └── claude_atom_draft.py   # AI-powered atom generation with Claude API
+│   └── impact-analyzer/
+│       └── impact_analyzer.py     # Comprehensive impact analysis tool
+├── schemas/
+│   ├── atom.schema.yaml           # Complete atom schema definition
+│   └── module.schema.yaml         # Module schema definition
 ├── graph/
 │   └── customer-journey-graph.json  # Master graph database
 ├── tools/
 │   ├── build-journey.js           # Build complete journey docs
 │   ├── impact-analysis.js         # Analyze change impacts
 │   ├── validate-graph.js          # Validate graph integrity
-│   └── generate-atom.js           # Generate new atoms
+│   ├── generate-atom.js           # Generate new atoms
+│   └── generate-atoms-batch.py    # Batch atom generation
 ├── public/
 │   └── journey-graph-viewer.html  # Interactive visualization
 ├── dist/
 │   └── journeys/                  # Generated documentation
-└── docs/
-    └── IMPLEMENTATION_GUIDE.md    # Detailed guide
+├── docs/
+│   ├── CUSTOMER_JOURNEY_FRAMEWORK.md  # Complete methodology & framework
+│   ├── ATOM_REVIEW_CHECKLIST.md      # QA checklist for atoms
+│   └── IMPLEMENTATION_GUIDE.md       # Implementation guide
+└── server.js                       # Visualization web server
 
 ```
 
@@ -115,8 +127,70 @@ npm run generate "Processor reviews credit report"
 
 # Start visualization server
 npm start
-# Then open http://localhost:3000/customer-journey/public/journey-graph-viewer.html
+# Then open http://localhost:3000/public/journey-graph-viewer.html
 ```
+
+---
+
+## 🤖 AI-Powered Tools
+
+### Claude Atom Generator
+
+Automatically generate atoms from SOP documentation using Claude AI:
+
+```bash
+# Set your Anthropic API key
+export ANTHROPIC_API_KEY="your-key-here"
+
+# Generate atoms from an SOP
+python ai-engine/atom-generator/claude_atom_draft.py docs/SOP-Income-Verification.md
+
+# The tool will:
+# 1. Read the SOP
+# 2. Use Claude to identify atomic steps
+# 3. Classify each as front-stage/back-stage/system
+# 4. Map to taxonomy categories
+# 5. Extract regulatory requirements
+# 6. Estimate timing and SLAs
+# 7. Generate complete YAML files
+```
+
+**Features:**
+- Analyzes SOP/process documentation
+- Identifies indivisible atoms
+- Classifies stage (front/back/system) and category
+- Maps to regulatory requirements (TRID, RESPA, ECOA, etc.)
+- Extracts dependencies
+- Provides realistic timing estimates
+- Generates schema-compliant YAML
+
+### Python Impact Analyzer
+
+Comprehensive impact analysis for atom changes:
+
+```bash
+# Analyze impact of modifying an atom
+python ai-engine/impact-analyzer/impact_analyzer.py atom-bo-005-income-validation modify
+
+# Generate JSON report
+python ai-engine/impact-analyzer/impact_analyzer.py atom-bo-005-income-validation modify --report-format=json
+```
+
+**Analysis includes:**
+- Immediate dependencies (direct impact)
+- Downstream dependencies (cascading impact)
+- Customer-facing impacts (CX assessment)
+- Regulatory impacts (compliance risk)
+- SLA cascade (timing implications)
+- Risk scoring (LOW/MEDIUM/HIGH)
+- Actionable recommendations
+
+**Change types:**
+- `modify` - Changing timing, requirements, or outputs
+- `remove` - Removing an atom entirely
+- `add` - Adding a new atom
+
+---
 
 ## 📊 Sample Journey: Conventional Purchase
 

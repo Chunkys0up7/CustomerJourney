@@ -1,0 +1,204 @@
+id: module-pre-qualification
+name: Pre-Qualification
+description: Complete workflow for pre-qualifying a borrower, including initial inquiry, credit consent, soft credit pull, calculation, and letter generation
+
+owner_role: loan_officer
+supporting_roles:
+  - system
+
+target_hours: 1
+max_hours: 2
+typical_duration_days: 0
+
+customer_milestone: Pre-Qualified
+internal_milestone: Lead Converted
+
+atoms:
+  - atom-cust-001-inquiry
+  - atom-bo-001-assign-lo
+  - atom-cust-002-consent-credit
+  - atom-sys-001-soft-credit
+  - atom-bo-002-preq-calc
+  - atom-sys-002-email-preq
+  - atom-cust-003-preq-letter
+
+success_criteria:
+  - Borrower contact information captured
+  - Credit consent obtained
+  - Credit score retrieved
+  - DTI calculated
+  - Pre-qualification amount determined
+  - Pre-qual letter delivered to borrower
+
+completion_checklist:
+  - item: "Credit authorization signed"
+    required: true
+    notes: "FCRA compliance requirement"
+  - item: "Credit score >= 580"
+    required: false
+    notes: "Minimum for most loan programs"
+  - item: "DTI <= 50%"
+    required: false
+    notes: "Standard qualifying ratio"
+  - item: "Pre-qual letter generated"
+    required: true
+
+failure_modes:
+  - failure: "Credit bureau API timeout"
+    probability: "low"
+    impact: "medium"
+    mitigation: "Retry with exponential backoff; manual credit pull as backup"
+
+  - failure: "Credit score below program minimums"
+    probability: "medium"
+    impact: "high"
+    mitigation: "Offer credit repair guidance; suggest co-borrower; FHA program"
+
+  - failure: "DTI too high for any program"
+    probability: "low"
+    impact: "high"
+    mitigation: "Discuss debt paydown options; larger down payment; non-QM programs"
+
+dependencies:
+  requires_modules: []
+  enables_modules:
+    - module-application
+  parallel_modules: []
+
+inputs:
+  - data_point: "borrower_name"
+    source: "atom-cust-001-inquiry"
+    required: true
+    format: "string"
+
+  - data_point: "property_type"
+    source: "atom-cust-001-inquiry"
+    required: true
+    format: "enum"
+
+  - data_point: "loan_amount"
+    source: "atom-cust-001-inquiry"
+    required: true
+    format: "number"
+
+  - data_point: "estimated_income"
+    source: "atom-cust-001-inquiry"
+    required: true
+    format: "number"
+
+outputs:
+  - data_point: "prequalified_amount"
+    destination: "module-application"
+    format: "number"
+
+  - data_point: "credit_score"
+    destination: "storage"
+    format: "number"
+
+  - data_point: "estimated_dti"
+    destination: "module-application"
+    format: "percent"
+
+regulatory_requirements:
+  - regulation: "FCRA"
+    requirement: "Credit authorization before inquiry"
+    deadline: "Before credit pull"
+    section: "15 USC 1681b"
+
+  - regulation: "ECOA"
+    requirement: "No discrimination in credit decisions"
+    deadline: "Throughout process"
+    section: "12 CFR 1002.4"
+
+performance_metrics:
+  completion_rate_percent: 87.5
+  average_duration_hours: 0.5
+  rework_rate_percent: 8.0
+  customer_satisfaction_score: 8.2
+  nps_impact: 45
+
+variants:
+  - variant_name: "FHA"
+    differences: "Minimum credit score 580, DTI up to 50%"
+    additional_atoms: []
+    removed_atoms: []
+    modified_timing:
+      target_hours: 1
+      max_hours: 2
+
+  - variant_name: "VA"
+    differences: "No minimum credit score, DTI up to 60% with comp factors"
+    additional_atoms: []
+    removed_atoms: []
+    modified_timing:
+      target_hours: 1
+      max_hours: 2
+
+  - variant_name: "Jumbo"
+    differences: "Higher credit score required (700+), lower DTI (43%)"
+    additional_atoms: []
+    removed_atoms: []
+    modified_timing:
+      target_hours: 1
+      max_hours: 2
+
+automation:
+  automation_level: "fully_automated"
+  automated_atoms:
+    - atom-bo-001-assign-lo
+    - atom-sys-001-soft-credit
+    - atom-bo-002-preq-calc
+    - atom-sys-002-email-preq
+  manual_touchpoints:
+    - "Credit authorization (borrower action)"
+  automation_opportunities:
+    - opportunity: "AI-powered credit analysis with recommendations"
+      estimated_savings_hours: 0.25
+      complexity: "medium"
+
+quality_checks:
+  - checkpoint: "Credit score matches bureau report"
+    criteria: "Exact match within 5 points"
+    frequency: "sample"
+    responsible_role: "loan_officer"
+
+  - checkpoint: "DTI calculation accuracy"
+    criteria: "Formula: (debts / income) matches manual calc"
+    frequency: "sample"
+    responsible_role: "loan_officer"
+
+training_requirements:
+  required_training:
+    - "FCRA Credit Authorization Compliance"
+    - "Pre-Qualification vs Pre-Approval"
+    - "DTI Calculation Fundamentals"
+  estimated_training_hours: 2
+  competency_checks:
+    - "FCRA compliance quiz"
+    - "DTI calculation test"
+
+sop_links: []
+
+version: "1.0.0"
+last_updated: "2024-01-15T10:00:00Z"
+change_log:
+  - version: "1.0.0"
+    date: "2024-01-15T10:00:00Z"
+    author: "System Generator"
+    description: "Initial module creation"
+    impact: "major"
+
+tags:
+  - "pre-qualification"
+  - "lead-conversion"
+  - "credit-analysis"
+  - "automated"
+
+notes: |
+  This module is fully automated except for borrower actions. Average completion
+  time is under 1 hour, providing fast response to leads. High NPS impact due
+  to quick turnaround and clear communication.
+
+related_modules:
+  - module-application
+  - module-income-verification

@@ -1,0 +1,33 @@
+id: atom-sys-005-le-delivery
+name: Loan Estimate Delivery
+category: data_transform
+stage: system
+actor: system
+channel: email
+description: Electronically deliver LE to borrower via email with e-sign capability
+estimated_duration_minutes: 2
+system_integration:
+  system_name: E-signature Platform (DocuSign/Blend)
+  authentication: oauth2
+  timeout_seconds: 15
+  retry_policy: exponential_backoff
+  max_retries: 3
+regulatory_requirements:
+- regulation: TRID
+  section: 12 CFR 1026.19(e)(1)(iv)
+  description: LE delivery triggers 10-business-day intent to proceed waiting period
+  deadline_days: 10
+dependencies:
+  requires:
+  - atom-bo-006-le-preparation
+  enables:
+  - atom-cust-007-le-review
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.449454'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.449457'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

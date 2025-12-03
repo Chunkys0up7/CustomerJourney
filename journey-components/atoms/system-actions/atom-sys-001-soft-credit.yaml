@@ -1,0 +1,29 @@
+id: atom-sys-001-soft-credit
+name: Soft Credit Pull
+category: api_call
+stage: system
+actor: system
+channel: api
+description: Automated soft credit inquiry to credit bureau (Experian, Equifax, or
+  TransUnion)
+estimated_duration_minutes: 2
+system_integration:
+  system_name: Credit Bureau API
+  authentication: oauth2
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3
+dependencies:
+  requires:
+  - atom-cust-002-consent-credit
+  enables:
+  - atom-bo-002-preq-calc
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.428399'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.428404'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

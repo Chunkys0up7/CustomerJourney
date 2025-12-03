@@ -1,0 +1,28 @@
+id: atom-sys-004-email-doc-request
+name: Email Document Request
+category: data_transform
+stage: system
+actor: system
+channel: email
+description: Send document checklist to borrower with upload portal link
+estimated_duration_minutes: 1
+system_integration:
+  system_name: Email Service
+  authentication: api_key
+  timeout_seconds: 10
+  retry_policy: fixed_interval
+  max_retries: 3
+dependencies:
+  requires:
+  - atom-bo-004-doc-request
+  enables:
+  - atom-cust-006-doc-upload
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.443485'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.443488'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

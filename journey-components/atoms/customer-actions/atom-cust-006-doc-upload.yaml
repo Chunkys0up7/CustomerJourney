@@ -1,0 +1,35 @@
+id: atom-cust-006-doc-upload
+name: Upload Documents
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+description: Borrower uploads required documents (paystubs, W2s, bank statements,
+  etc.)
+estimated_duration_minutes: 30
+customer_experience:
+  effort_level: high
+  emotional_impact: neutral
+  nps_impact: -5
+  pain_points:
+  - Finding documents
+  - Scanning/photos
+  - Upload errors
+  delight_opportunities:
+  - Mobile upload
+  - Progress tracking
+  - Checklist clarity
+dependencies:
+  requires:
+  - atom-sys-004-email-doc-request
+  enables:
+  - atom-bo-005-doc-review
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.444816'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.444820'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

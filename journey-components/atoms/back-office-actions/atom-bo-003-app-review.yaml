@@ -1,0 +1,30 @@
+id: atom-bo-003-app-review
+name: Application Initial Review
+category: document_review
+stage: back_stage
+actor: loan_officer
+channel: web
+description: Loan officer reviews 1003 for completeness and obvious red flags
+estimated_duration_minutes: 30
+sla_hours: 4
+sla_unit: hours
+process_metrics:
+  automation_level: semi_automated
+  error_rate_percent: 5.0
+  rework_rate_percent: 15.0
+  bottleneck_risk: medium
+dependencies:
+  requires:
+  - atom-cust-005-app-submit
+  - atom-sys-003-hard-credit
+  enables:
+  - atom-bo-004-doc-request
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.440742'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.440745'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

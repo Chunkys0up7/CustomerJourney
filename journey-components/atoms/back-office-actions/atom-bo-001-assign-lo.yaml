@@ -1,0 +1,30 @@
+id: atom-bo-001-assign-lo
+name: Loan Officer Assignment
+category: handoff
+stage: back_stage
+actor: system
+channel: api
+description: System assigns loan officer based on availability, specialization, and
+  workload
+estimated_duration_minutes: 1
+sla_hours: 1
+sla_unit: hours
+process_metrics:
+  automation_level: automated
+  error_rate_percent: 0.5
+  rework_rate_percent: 1.0
+  bottleneck_risk: low
+dependencies:
+  requires:
+  - atom-cust-001-inquiry
+  enables:
+  - atom-bo-002-preq-calc
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.429870'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.429874'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

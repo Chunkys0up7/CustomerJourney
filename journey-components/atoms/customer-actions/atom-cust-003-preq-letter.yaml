@@ -1,0 +1,31 @@
+id: atom-cust-003-preq-letter
+name: Receive Pre-Qualification Letter
+category: communication_receipt
+stage: front_stage
+actor: borrower
+channel: email
+description: Borrower receives and reviews pre-qualification letter with estimated
+  loan amount
+estimated_duration_minutes: 5
+customer_experience:
+  effort_level: low
+  emotional_impact: positive
+  nps_impact: 8
+  pain_points: []
+  delight_opportunities:
+  - Clear next steps
+  - Mobile-friendly format
+dependencies:
+  requires:
+  - atom-sys-002-email-preq
+  enables:
+  - atom-cust-004-full-app-start
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.434233'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.434237'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

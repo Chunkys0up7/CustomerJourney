@@ -1,0 +1,33 @@
+id: atom-sys-003-hard-credit
+name: Hard Credit Pull (Tri-Merge)
+category: api_call
+stage: system
+actor: system
+channel: api
+description: Pull full tri-merge credit report from all three bureaus
+estimated_duration_minutes: 3
+system_integration:
+  system_name: Credit Bureau (Tri-Merge)
+  authentication: oauth2
+  timeout_seconds: 45
+  retry_policy: exponential_backoff
+  max_retries: 2
+regulatory_requirements:
+- regulation: FCRA
+  section: 15 USC 1681b
+  description: Permissible purpose for credit report
+  deadline_days: 0
+dependencies:
+  requires:
+  - atom-cust-005-app-submit
+  enables:
+  - atom-bo-003-app-review
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.439288'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.439291'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

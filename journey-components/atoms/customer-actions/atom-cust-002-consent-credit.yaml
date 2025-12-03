@@ -1,0 +1,35 @@
+id: atom-cust-002-consent-credit
+name: Credit Authorization Consent
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: web
+description: Borrower provides consent for soft credit pull and reviews FCRA disclosures
+estimated_duration_minutes: 5
+customer_experience:
+  effort_level: low
+  emotional_impact: neutral
+  nps_impact: 0
+  pain_points:
+  - Legal language complexity
+  delight_opportunities:
+  - Clear explanation of soft vs hard pull
+regulatory_requirements:
+- regulation: FCRA
+  section: 15 USC 1681
+  description: Requires borrower consent before credit pull
+  deadline_days: 0
+dependencies:
+  requires:
+  - atom-cust-001-inquiry
+  enables:
+  - atom-sys-001-soft-credit
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.425883'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.425889'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

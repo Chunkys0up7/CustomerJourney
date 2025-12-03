@@ -1,0 +1,28 @@
+id: atom-bo-007-fee-collection
+name: Collect Application and Credit Fees
+category: data_validation
+stage: back_stage
+actor: loan_officer
+channel: web
+description: Collect application fees and credit report fees (if applicable)
+estimated_duration_minutes: 10
+sla_hours: 4
+sla_unit: hours
+process_metrics:
+  automation_level: semi_automated
+  error_rate_percent: 2.0
+  rework_rate_percent: 5.0
+  bottleneck_risk: low
+dependencies:
+  requires:
+  - atom-cust-008-intent-proceed
+  enables: []
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.453951'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.453954'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

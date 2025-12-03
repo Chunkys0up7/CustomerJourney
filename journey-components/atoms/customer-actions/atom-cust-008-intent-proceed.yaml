@@ -1,0 +1,36 @@
+id: atom-cust-008-intent-proceed
+name: Intent to Proceed
+category: decision_point
+stage: front_stage
+actor: borrower
+channel: web
+description: Borrower indicates intent to proceed with the loan after LE review
+estimated_duration_minutes: 5
+customer_experience:
+  effort_level: low
+  emotional_impact: positive
+  nps_impact: 7
+  pain_points: []
+  delight_opportunities:
+  - Clear next steps
+  - Processing timeline
+regulatory_requirements:
+- regulation: TRID
+  section: 12 CFR 1026.19(e)(2)(i)(A)
+  description: Borrower must indicate intent to proceed before fees collected
+  deadline_days: 0
+dependencies:
+  requires:
+  - atom-cust-007-le-review
+  enables:
+  - atom-bo-007-fee-collection
+  - atom-bo-008-appraisal-order
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.452387'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.452391'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

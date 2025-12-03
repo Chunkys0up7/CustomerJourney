@@ -1,0 +1,31 @@
+id: atom-bo-002-preq-calc
+name: Pre-Qualification Calculation
+category: calculation
+stage: back_stage
+actor: system
+channel: api
+description: Calculate maximum loan amount based on credit score, income, debts, and
+  DTI ratios
+estimated_duration_minutes: 5
+sla_hours: 2
+sla_unit: hours
+process_metrics:
+  automation_level: automated
+  error_rate_percent: 2.0
+  rework_rate_percent: 5.0
+  bottleneck_risk: low
+dependencies:
+  requires:
+  - atom-sys-001-soft-credit
+  - atom-bo-001-assign-lo
+  enables:
+  - atom-sys-002-email-preq
+version: 1.0.0
+last_updated: '2025-12-03T15:18:45.431428'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T15:18:45.431431'
+  author: System Generator
+  description: Initial atom creation
+  breaking_changes: false
+tags: []

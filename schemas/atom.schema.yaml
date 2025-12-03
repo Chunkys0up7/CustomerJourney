@@ -1,0 +1,471 @@
+# Atom Schema Definition
+# Based on NASA-STD-2100-91 atomic documentation principles
+
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "https://customer-journey-as-code.org/schemas/atom.schema.yaml"
+
+title: Customer Journey Atom
+description: An indivisible unit of customer experience or business process
+
+type: object
+required:
+  - id
+  - name
+  - category
+  - stage
+  - actor
+  - version
+
+properties:
+  # === IDENTITY ===
+  id:
+    type: string
+    pattern: "^atom-(cust|bo|sys)-\\d{2,3}-[a-z0-9-]+$"
+    description: "Unique identifier: atom-{type}-{seq}-{short-name}"
+    examples:
+      - "atom-cust-01-inquiry"
+      - "atom-bo-05-income-validation"
+      - "atom-sys-02-email-preq"
+
+  name:
+    type: string
+    minLength: 5
+    maxLength: 100
+    description: "Human-readable name"
+    examples:
+      - "Initial Loan Inquiry"
+      - "Income Validation"
+      - "Pre-Qualification Email"
+
+  description:
+    type: string
+    minLength: 20
+    maxLength: 500
+    description: "Detailed description of this atom's purpose and activities"
+
+  # === CLASSIFICATION ===
+  category:
+    type: string
+    enum:
+      # Front-stage categories
+      - "information_submission"
+      - "decision_point"
+      - "acknowledgment"
+      - "communication_receipt"
+      - "waiting_state"
+      # Back-stage categories
+      - "data_validation"
+      - "document_review"
+      - "calculation"
+      - "decision"
+      - "external_request"
+      - "compliance_check"
+      - "handoff"
+      # System categories
+      - "api_call"
+      - "data_transform"
+      - "queue_management"
+      - "timer_event"
+    description: "Atom category from taxonomy"
+
+  stage:
+    type: string
+    enum:
+      - "front_stage"
+      - "back_stage"
+      - "system"
+    description: "Journey stage: customer-facing, back-office, or system"
+
+  # === ACTOR & CHANNEL ===
+  actor:
+    type: string
+    enum:
+      - "borrower"
+      - "co_borrower"
+      - "loan_officer"
+      - "processor"
+      - "underwriter"
+      - "closer"
+      - "funder"
+      - "system"
+      - "third_party"
+    description: "Primary actor performing this atom"
+
+  channel:
+    type: string
+    enum:
+      - "web"
+      - "mobile"
+      - "email"
+      - "phone"
+      - "in_person"
+      - "api"
+      - "batch"
+    description: "Communication or interaction channel"
+
+  # === TIMING & SLA ===
+  estimated_duration_minutes:
+    type: integer
+    minimum: 0
+    maximum: 10080  # 1 week in minutes
+    description: "Estimated time to complete this atom"
+
+  sla_hours:
+    type: number
+    minimum: 0
+    description: "Service level agreement in business hours"
+
+  sla_unit:
+    type: string
+    enum:
+      - "business_days"
+      - "calendar_days"
+      - "hours"
+    default: "business_days"
+    description: "Unit for SLA measurement"
+
+  # === DEPENDENCIES ===
+  dependencies:
+    type: object
+    properties:
+      requires:
+        type: array
+        items:
+          type: string
+          pattern: "^atom-[a-z]+-\\d{2,3}-[a-z0-9-]+$"
+        description: "Atoms that must complete before this one"
+
+      enables:
+        type: array
+        items:
+          type: string
+          pattern: "^atom-[a-z]+-\\d{2,3}-[a-z0-9-]+$"
+        description: "Atoms that this one unlocks"
+
+      parallel_with:
+        type: array
+        items:
+          type: string
+          pattern: "^atom-[a-z]+-\\d{2,3}-[a-z0-9-]+$"
+        description: "Atoms that can run concurrently"
+
+      optional_follows:
+        type: array
+        items:
+          type: string
+          pattern: "^atom-[a-z]+-\\d{2,3}-[a-z0-9-]+$"
+        description: "Conditional dependencies (may or may not trigger)"
+
+  # === DATA ===
+  data_inputs:
+    type: array
+    items:
+      type: object
+      required:
+        - field
+        - source
+        - required
+      properties:
+        field:
+          type: string
+          description: "Data field name"
+        source:
+          type: string
+          description: "Source atom ID or 'external'"
+        required:
+          type: boolean
+          description: "Is this input required?"
+        format:
+          type: string
+          description: "Data format or type"
+
+  data_outputs:
+    type: array
+    items:
+      type: object
+      required:
+        - field
+        - destination
+      properties:
+        field:
+          type: string
+          description: "Output field name"
+        destination:
+          type: string
+          description: "Destination atom ID or 'storage'"
+        format:
+          type: string
+          description: "Output format"
+
+  # === REGULATORY ===
+  regulatory_requirements:
+    type: array
+    items:
+      type: object
+      required:
+        - regulation
+        - description
+      properties:
+        regulation:
+          type: string
+          enum:
+            - "TRID"
+            - "RESPA"
+            - "ECOA"
+            - "FCRA"
+            - "HMDA"
+            - "FHA"
+            - "VA"
+            - "USDA"
+            - "Fannie Mae"
+            - "Freddie Mac"
+          description: "Regulatory body or requirement"
+        section:
+          type: string
+          description: "Specific regulation section"
+        description:
+          type: string
+          description: "What this regulation requires"
+        deadline_days:
+          type: integer
+          description: "Compliance deadline in days"
+
+  # === CUSTOMER EXPERIENCE (front_stage only) ===
+  customer_experience:
+    type: object
+    properties:
+      effort_level:
+        type: string
+        enum: ["low", "medium", "high"]
+        description: "Customer effort required"
+
+      emotional_impact:
+        type: string
+        enum: ["negative", "neutral", "positive"]
+        description: "Expected emotional response"
+
+      nps_impact:
+        type: integer
+        minimum: -10
+        maximum: 10
+        description: "Net Promoter Score impact"
+
+      pain_points:
+        type: array
+        items:
+          type: string
+        description: "Known customer friction points"
+
+      delight_opportunities:
+        type: array
+        items:
+          type: string
+        description: "Opportunities to exceed expectations"
+
+  # === PROCESS METRICS (back_stage only) ===
+  process_metrics:
+    type: object
+    properties:
+      automation_level:
+        type: string
+        enum: ["manual", "semi_automated", "automated"]
+        description: "Degree of automation"
+
+      error_rate_percent:
+        type: number
+        minimum: 0
+        maximum: 100
+        description: "Historical error rate"
+
+      rework_rate_percent:
+        type: number
+        minimum: 0
+        maximum: 100
+        description: "How often work must be redone"
+
+      bottleneck_risk:
+        type: string
+        enum: ["low", "medium", "high"]
+        description: "Risk of becoming a process bottleneck"
+
+      staffing_fte:
+        type: number
+        description: "FTE hours typically required"
+
+  # === SYSTEM INTEGRATION (system stage only) ===
+  system_integration:
+    type: object
+    properties:
+      system_name:
+        type: string
+        description: "Name of integrated system"
+
+      api_endpoint:
+        type: string
+        format: uri
+        description: "API endpoint URL"
+
+      authentication:
+        type: string
+        enum: ["oauth2", "api_key", "basic_auth", "certificate"]
+        description: "Authentication method"
+
+      timeout_seconds:
+        type: integer
+        minimum: 1
+        maximum: 300
+        description: "Request timeout"
+
+      retry_policy:
+        type: string
+        enum: ["none", "exponential_backoff", "fixed_interval"]
+        description: "Retry strategy on failure"
+
+      max_retries:
+        type: integer
+        minimum: 0
+        maximum: 10
+        description: "Maximum retry attempts"
+
+  # === SOP LINKS ===
+  sop_links:
+    type: array
+    items:
+      type: object
+      required:
+        - sop_id
+        - relevance
+      properties:
+        sop_id:
+          type: string
+          pattern: "^sop-[a-z]{2,4}-\\d{3}-[a-z0-9-]+$"
+          description: "SOP identifier"
+
+        relevance:
+          type: string
+          enum: ["primary", "supporting", "reference"]
+          description: "How this SOP relates to the atom"
+
+        section:
+          type: string
+          description: "Specific SOP section reference"
+
+        notes:
+          type: string
+          description: "Additional context"
+
+  # === VARIANTS ===
+  variants:
+    type: array
+    items:
+      type: object
+      required:
+        - loan_type
+        - differences
+      properties:
+        loan_type:
+          type: string
+          enum: ["conventional", "fha", "va", "usda", "jumbo", "refinance"]
+          description: "Loan type for this variant"
+
+        differences:
+          type: string
+          description: "How this variant differs from base atom"
+
+        additional_requirements:
+          type: array
+          items:
+            type: string
+          description: "Extra requirements for this variant"
+
+  # === TESTING ===
+  testing:
+    type: object
+    properties:
+      test_scenarios:
+        type: array
+        items:
+          type: object
+          properties:
+            scenario:
+              type: string
+            expected_outcome:
+              type: string
+            edge_cases:
+              type: array
+              items:
+                type: string
+
+      mock_data:
+        type: object
+        description: "Sample data for testing this atom"
+
+  # === VERSIONING ===
+  version:
+    type: string
+    pattern: "^\\d+\\.\\d+\\.\\d+$"
+    description: "Semantic version (major.minor.patch)"
+
+  last_updated:
+    type: string
+    format: date-time
+    description: "ISO 8601 timestamp of last update"
+
+  change_log:
+    type: array
+    items:
+      type: object
+      required:
+        - version
+        - date
+        - description
+      properties:
+        version:
+          type: string
+        date:
+          type: string
+          format: date-time
+        author:
+          type: string
+        description:
+          type: string
+        breaking_changes:
+          type: boolean
+          default: false
+
+  # === METADATA ===
+  tags:
+    type: array
+    items:
+      type: string
+    description: "Searchable tags"
+
+  notes:
+    type: string
+    description: "Implementation notes or caveats"
+
+# === CONDITIONAL VALIDATION ===
+if:
+  properties:
+    stage:
+      const: "front_stage"
+then:
+  required:
+    - customer_experience
+
+if:
+  properties:
+    stage:
+      const: "back_stage"
+then:
+  required:
+    - process_metrics
+    - sla_hours
+
+if:
+  properties:
+    stage:
+      const: "system"
+then:
+  required:
+    - system_integration
