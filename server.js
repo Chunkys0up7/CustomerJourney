@@ -22,7 +22,7 @@ const server = http.createServer((req, res) => {
 
   let filePath = '.' + req.url;
   if (filePath === './') {
-    filePath = './public/journey-graph-viewer.html';
+    filePath = './public/journey-dashboard.html';
   }
 
   const extname = String(path.extname(filePath)).toLowerCase();
@@ -45,10 +45,12 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`\n🚀 Customer Journey Visualization Server`);
+  console.log(`\n🚀 Customer Journey Dashboard Server`);
   console.log(`═══════════════════════════════════════════════════════════`);
-  console.log(`\n📊 Server running at: http://localhost:${PORT}/`);
-  console.log(`\n📈 View graph: http://localhost:${PORT}/public/journey-graph-viewer.html`);
+  console.log(`\n📊 Dashboard: http://localhost:${PORT}/`);
+  console.log(`\n📈 Alternate Views:`);
+  console.log(`   • Dashboard: http://localhost:${PORT}/public/journey-dashboard.html`);
+  console.log(`   • Graph:     http://localhost:${PORT}/public/journey-graph-viewer.html`);
   console.log(`\n📁 Serving files from: ${__dirname}`);
   console.log(`\n💡 Press Ctrl+C to stop the server\n`);
 });
