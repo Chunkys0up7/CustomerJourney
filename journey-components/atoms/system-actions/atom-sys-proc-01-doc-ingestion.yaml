@@ -1,0 +1,33 @@
+id: atom-sys-proc-01-doc-ingestion
+name: Document Ingestion
+description: Document Ingestion - Processing phase
+category: data_transform
+stage: system
+actor: system
+channel: api
+phase: Processing
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-cust-proc-02-gather-docs
+  enables:
+  - atom-bo-proc-01-completeness-audit
+data_outputs:
+- field: dms_document_ids
+  destination: storage
+  format: array
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.151877'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.151883'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

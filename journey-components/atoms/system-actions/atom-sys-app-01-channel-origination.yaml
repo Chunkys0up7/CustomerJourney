@@ -1,0 +1,36 @@
+id: atom-sys-app-01-channel-origination
+name: Application Channel Origination
+description: Application Channel Origination - Application phase
+category: queue_management
+stage: system
+actor: system
+channel: api
+phase: Application
+estimated_duration_minutes: 1
+dependencies:
+  requires: []
+  enables:
+  - atom-bo-app-01-intake-queue
+data_outputs:
+- field: application_id
+  destination: storage
+  format: string
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.067519'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.067522'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: TRID
+  section: 12 CFR 1026.19(e)
+  description: Application triggers 3-day LE
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

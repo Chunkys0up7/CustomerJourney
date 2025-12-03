@@ -1,0 +1,38 @@
+id: atom-fund-06-quality-assurance
+name: Post-Funding QA
+description: Post-Funding QA - Funding phase
+category: compliance_check
+stage: back_stage
+actor: funder
+channel: web
+phase: Funding
+estimated_duration_minutes: 240
+dependencies:
+  requires:
+  - atom-fund-03-document-archive
+  enables:
+  - atom-fund-07-loan-archived
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.215210'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.215215'
+  author: Complete Journey Generator
+  description: Generated Funding phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 4
+sla_unit: hours
+regulatory_requirements:
+- regulation: TRID
+  section: Audit Requirements
+  description: QA review
+- regulation: Fannie Mae
+  section: QA
+  description: Quality control
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

@@ -1,0 +1,27 @@
+id: atom-cust-fund-02-first-payment
+name: First Payment Instructions
+description: First Payment Instructions - Funding phase
+category: communication_receipt
+stage: front_stage
+actor: borrower
+channel: email
+phase: Funding
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-cust-fund-01-loan-complete
+  enables: []
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.213603'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.213609'
+  author: Complete Journey Generator
+  description: Generated Funding phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

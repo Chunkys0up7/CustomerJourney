@@ -1,0 +1,28 @@
+id: atom-cust-close-01-attend-closing
+name: Attend Closing
+description: Attend Closing - Closing phase
+category: waiting_state
+stage: front_stage
+actor: borrower
+channel: in_person
+phase: Closing
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-cust-cd-02-closing-confirm
+  enables:
+  - atom-cust-close-02-sign-docs
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.194031'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.194036'
+  author: Complete Journey Generator
+  description: Generated Closing phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

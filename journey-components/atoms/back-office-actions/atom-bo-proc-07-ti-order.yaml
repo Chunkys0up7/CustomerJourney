@@ -1,0 +1,38 @@
+id: atom-bo-proc-07-ti-order
+name: Order Title Insurance
+description: Order Title Insurance - Processing phase
+category: external_request
+stage: back_stage
+actor: processor
+channel: web
+phase: Processing
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-bo-proc-04-data-input
+  enables:
+  - atom-bo-proc-10-ti-report
+data_outputs:
+- field: title_order_id
+  destination: storage
+  format: string
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.142947'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.142952'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 2
+sla_unit: hours
+regulatory_requirements:
+- regulation: TRID
+  section: Title Insurance
+  description: Disclosure
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

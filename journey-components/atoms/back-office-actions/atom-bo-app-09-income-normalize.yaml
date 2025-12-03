@@ -1,0 +1,39 @@
+id: atom-bo-app-09-income-normalize
+name: Income Normalization
+description: Income Normalization - Application phase
+category: calculation
+stage: back_stage
+actor: processor
+channel: web
+phase: Application
+estimated_duration_minutes: 45
+dependencies:
+  requires:
+  - atom-bo-app-07-liability-import
+  - atom-bo-app-08-doc-storage
+  enables:
+  - atom-bo-app-11-conditions-initial
+data_outputs:
+- field: income_normalized
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.107419'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.107423'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 3
+sla_unit: hours
+regulatory_requirements:
+- regulation: Fannie Mae
+  section: B3-3
+  description: Income calculation
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

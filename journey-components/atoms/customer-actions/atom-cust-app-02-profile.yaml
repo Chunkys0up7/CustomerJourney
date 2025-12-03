@@ -1,0 +1,35 @@
+id: atom-cust-app-02-profile
+name: Borrower Basic Profile
+description: Borrower Basic Profile - Application phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 45
+dependencies:
+  requires:
+  - atom-bo-app-01-intake-queue
+  enables:
+  - atom-cust-app-03-borrower-details
+data_outputs:
+- field: borrower_basic_profile
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.071180'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.071186'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: HMDA
+  section: 12 CFR 1003
+  description: Demographic collection
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

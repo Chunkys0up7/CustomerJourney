@@ -1,0 +1,28 @@
+id: atom-cust-cd-02-closing-confirm
+name: Closing Confirmation
+description: Closing Confirmation - Closing phase
+category: communication_receipt
+stage: front_stage
+actor: borrower
+channel: email
+phase: Closing
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-bo-cd-07-closing-schedule
+  enables:
+  - atom-cust-close-01-attend-closing
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.192517'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.192522'
+  author: Complete Journey Generator
+  description: Generated Closing phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

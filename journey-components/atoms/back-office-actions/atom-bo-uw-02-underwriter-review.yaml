@@ -1,0 +1,40 @@
+id: atom-bo-uw-02-underwriter-review
+name: Underwriter File Review
+description: Underwriter File Review - Underwriting phase
+category: document_review
+stage: back_stage
+actor: underwriter
+channel: web
+phase: Underwriting
+estimated_duration_minutes: 240
+dependencies:
+  requires:
+  - atom-bo-uw-01-submission
+  enables:
+  - atom-bo-uw-03-issue-conditions
+  - atom-bo-uw-06-appraisal-review
+  - atom-sys-uw-01-dti-calc
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.163798'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.163804'
+  author: Complete Journey Generator
+  description: Generated Underwriting phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 24
+sla_unit: hours
+regulatory_requirements:
+- regulation: Fannie Mae
+  section: Selling Guide
+  description: UW standards
+- regulation: Freddie Mac
+  section: Selling Guide
+  description: UW guidelines
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

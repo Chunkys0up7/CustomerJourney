@@ -1,0 +1,33 @@
+id: atom-sys-pre-02-credit-parse
+name: Credit Data Parsing
+description: Credit Data Parsing - Pre-Qualification phase
+category: data_transform
+stage: system
+actor: system
+channel: api
+phase: Pre-Qualification
+estimated_duration_minutes: 3
+dependencies:
+  requires:
+  - atom-sys-pre-01-soft-credit
+  enables:
+  - atom-bo-pre-01-preliminary-approval
+data_outputs:
+- field: credit_metrics_parsed
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.060144'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.060150'
+  author: Complete Journey Generator
+  description: Generated Pre-Qualification phase atom
+  breaking_changes: false
+tags: []
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

@@ -1,0 +1,39 @@
+id: atom-bo-app-05-fraud-screen
+name: Fraud Screening
+description: Fraud Screening - Application phase
+category: compliance_check
+stage: back_stage
+actor: processor
+channel: web
+phase: Application
+estimated_duration_minutes: 15
+dependencies:
+  requires:
+  - atom-sys-app-02-kyc-verify
+  - atom-bo-app-04-data-quality
+  enables:
+  - atom-sys-app-03-credit-request
+data_outputs:
+- field: fraud_score
+  destination: storage
+  format: number
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.094649'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.094655'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 1
+sla_unit: hours
+regulatory_requirements:
+- regulation: FACTA
+  section: Red Flags
+  description: Fraud detection
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

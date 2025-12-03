@@ -1,0 +1,37 @@
+id: atom-bo-pre-02-lead-capture
+name: Lead Capture and Routing
+description: Lead Capture and Routing - Pre-Qualification phase
+category: handoff
+stage: back_stage
+actor: system
+channel: api
+phase: Pre-Qualification
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-cust-pre-01-inquiry
+  enables:
+  - atom-cust-pre-04-approval-delivery
+data_outputs:
+- field: crm_lead_id
+  destination: storage
+  format: string
+- field: assigned_lo
+  destination: storage
+  format: string
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.063996'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.063999'
+  author: Complete Journey Generator
+  description: Generated Pre-Qualification phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 1
+sla_unit: hours
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

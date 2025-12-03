@@ -1,0 +1,35 @@
+id: atom-cust-app-05-employment-details
+name: Employment Details
+description: Employment Details - Application phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 45
+dependencies:
+  requires:
+  - atom-cust-app-04-property-details
+  enables:
+  - atom-cust-app-06-asset-details
+data_outputs:
+- field: employment_details
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.076763'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.076769'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: TRID
+  section: Ability to Repay
+  description: Income verification
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

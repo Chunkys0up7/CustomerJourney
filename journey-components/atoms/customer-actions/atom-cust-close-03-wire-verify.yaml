@@ -1,0 +1,28 @@
+id: atom-cust-close-03-wire-verify
+name: Verify Wire Transfer
+description: Verify Wire Transfer - Closing phase
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: phone
+phase: Closing
+estimated_duration_minutes: 30
+dependencies:
+  requires:
+  - atom-bo-close-02-fund-setup
+  enables:
+  - atom-bo-close-03-recording
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.197276'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.197280'
+  author: Complete Journey Generator
+  description: Generated Closing phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

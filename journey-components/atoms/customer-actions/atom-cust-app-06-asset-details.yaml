@@ -1,0 +1,31 @@
+id: atom-cust-app-06-asset-details
+name: Asset and Liability Details
+description: Asset and Liability Details - Application phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-cust-app-05-employment-details
+  enables:
+  - atom-cust-app-07-declarations
+data_outputs:
+- field: asset_liability_details
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.078600'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.078604'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

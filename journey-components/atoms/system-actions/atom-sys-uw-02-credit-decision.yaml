@@ -1,0 +1,33 @@
+id: atom-sys-uw-02-credit-decision
+name: Automated Underwriting
+description: Automated Underwriting - Underwriting phase
+category: api_call
+stage: system
+actor: system
+channel: api
+phase: Underwriting
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-bo-uw-01-submission
+  enables:
+  - atom-bo-uw-02-underwriter-review
+data_outputs:
+- field: credit_decision_recommendation
+  destination: storage
+  format: string
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.176640'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.176644'
+  author: Complete Journey Generator
+  description: Generated Underwriting phase atom
+  breaking_changes: false
+tags: []
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

@@ -1,0 +1,38 @@
+id: atom-bo-cd-02-cd-delivery
+name: Deliver CD to Customer
+description: Deliver CD to Customer - Closing_Disclosure phase
+category: external_request
+stage: back_stage
+actor: processor
+channel: email
+phase: Closing_Disclosure
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-bo-cd-01-cd-generation
+  enables:
+  - atom-bo-cd-03-cd-review-period
+data_outputs:
+- field: cd_delivery_timestamp
+  destination: storage
+  format: datetime
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.180349'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.180355'
+  author: Complete Journey Generator
+  description: Generated Closing_Disclosure phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 1
+sla_unit: hours
+regulatory_requirements:
+- regulation: TRID
+  section: Delivery Requirement
+  description: 3-day rule
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

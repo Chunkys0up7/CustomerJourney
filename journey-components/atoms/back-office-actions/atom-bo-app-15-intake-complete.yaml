@@ -1,0 +1,30 @@
+id: atom-bo-app-15-intake-complete
+name: Application Intake Complete
+description: Application Intake Complete - Application phase
+category: handoff
+stage: back_stage
+actor: processor
+channel: web
+phase: Application
+estimated_duration_minutes: 15
+dependencies:
+  requires:
+  - atom-bo-app-14-esign-monitor
+  enables: []
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.120369'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.120373'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 1
+sla_unit: hours
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

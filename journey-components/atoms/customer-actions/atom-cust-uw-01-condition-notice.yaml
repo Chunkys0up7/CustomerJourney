@@ -1,0 +1,28 @@
+id: atom-cust-uw-01-condition-notice
+name: Receive Underwriting Conditions
+description: Receive Underwriting Conditions - Underwriting phase
+category: communication_receipt
+stage: front_stage
+actor: borrower
+channel: email
+phase: Underwriting
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-bo-uw-03-issue-conditions
+  enables:
+  - atom-cust-uw-02-satisfy-conditions
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.157119'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.157124'
+  author: Complete Journey Generator
+  description: Generated Underwriting phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

@@ -1,0 +1,35 @@
+id: atom-cust-app-08-consents
+name: Legal Consents
+description: Legal Consents - Application phase
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 15
+dependencies:
+  requires:
+  - atom-cust-app-07-declarations
+  enables:
+  - atom-cust-app-09-credit-auth
+data_outputs:
+- field: consents_accepted
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.082007'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.082013'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: GLBA
+  section: Privacy notice
+  description: Financial privacy
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

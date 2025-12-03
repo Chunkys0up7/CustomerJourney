@@ -1,0 +1,31 @@
+id: atom-cust-uw-02-satisfy-conditions
+name: Submit Condition Responses
+description: Submit Condition Responses - Underwriting phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Underwriting
+estimated_duration_minutes: 180
+dependencies:
+  requires:
+  - atom-cust-uw-01-condition-notice
+  enables:
+  - atom-bo-uw-04-condition-review
+data_outputs:
+- field: condition_response_submitted
+  destination: storage
+  format: array
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.158639'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.158644'
+  author: Complete Journey Generator
+  description: Generated Underwriting phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

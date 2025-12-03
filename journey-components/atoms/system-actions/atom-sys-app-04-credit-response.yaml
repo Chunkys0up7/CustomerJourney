@@ -1,0 +1,37 @@
+id: atom-sys-app-04-credit-response
+name: Credit Report Response
+description: Credit Report Response - Application phase
+category: api_call
+stage: system
+actor: system
+channel: api
+phase: Application
+estimated_duration_minutes: 30
+dependencies:
+  requires:
+  - atom-sys-app-03-credit-request
+  enables:
+  - atom-bo-app-06-credit-review
+data_outputs:
+- field: credit_report
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.098350'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.098357'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: FCRA
+  section: Permissible purpose
+  description: Hard pull
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

@@ -1,0 +1,31 @@
+id: atom-cust-app-10-upload-docs
+name: Document Upload
+description: Document Upload - Application phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-cust-app-09-credit-auth
+  enables:
+  - atom-bo-app-03-doc-review
+data_outputs:
+- field: documents_uploaded
+  destination: storage
+  format: array
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.085663'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.085669'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

@@ -1,0 +1,30 @@
+id: atom-cust-uw-03-approval-accept
+name: Accept Final Approval
+description: Accept Final Approval - Underwriting phase
+category: decision_point
+stage: front_stage
+actor: borrower
+channel: web
+phase: Underwriting
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-bo-uw-05-clear-to-close
+  enables: []
+data_outputs:
+- field: approval_accepted
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.160388'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.160391'
+  author: Complete Journey Generator
+  description: Generated Underwriting phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

@@ -1,0 +1,36 @@
+id: atom-cust-app-09-credit-auth
+name: Credit Report Authorization
+description: Credit Report Authorization - Application phase
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 10
+dependencies:
+  requires:
+  - atom-cust-app-08-consents
+  enables:
+  - atom-cust-app-10-upload-docs
+  - atom-sys-app-03-credit-request
+data_outputs:
+- field: credit_auth_given
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.083863'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.083869'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: FCRA
+  section: Credit authorization
+  description: Hard pull consent
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

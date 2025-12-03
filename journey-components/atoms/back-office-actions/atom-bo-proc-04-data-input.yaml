@@ -1,0 +1,35 @@
+id: atom-bo-proc-04-data-input
+name: Data Input to LOS
+description: Data Input to LOS - Processing phase
+category: data_validation
+stage: back_stage
+actor: processor
+channel: web
+phase: Processing
+estimated_duration_minutes: 90
+dependencies:
+  requires:
+  - atom-bo-proc-03-document-processing
+  enables:
+  - atom-bo-proc-05-voe-order
+  - atom-bo-proc-06-voa-order
+data_outputs:
+- field: los_data_populated
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.137750'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.137756'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 1.5
+sla_unit: hours
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

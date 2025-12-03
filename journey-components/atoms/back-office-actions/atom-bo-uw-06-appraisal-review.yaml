@@ -1,0 +1,38 @@
+id: atom-bo-uw-06-appraisal-review
+name: Appraisal Review
+description: Appraisal Review - Underwriting phase
+category: document_review
+stage: back_stage
+actor: underwriter
+channel: web
+phase: Underwriting
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-bo-uw-02-underwriter-review
+  - atom-bo-proc-11-appraisal-received
+  enables:
+  - atom-bo-uw-03-issue-conditions
+data_outputs:
+- field: appraisal_acceptable
+  destination: storage
+  format: boolean
+- field: appraisal_notes
+  destination: storage
+  format: text
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.172860'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.172866'
+  author: Complete Journey Generator
+  description: Generated Underwriting phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 2
+sla_unit: hours
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

@@ -1,0 +1,35 @@
+id: atom-cust-app-03-borrower-details
+name: Borrower Detailed Information
+description: Borrower Detailed Information - Application phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-cust-app-02-profile
+  enables:
+  - atom-cust-app-04-property-details
+data_outputs:
+- field: borrower_profile_normalized
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.072936'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.072942'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: ECOA
+  section: 12 CFR 1002
+  description: No discrimination
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

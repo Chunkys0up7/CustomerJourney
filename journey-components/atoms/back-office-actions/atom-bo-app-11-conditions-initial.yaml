@@ -1,0 +1,35 @@
+id: atom-bo-app-11-conditions-initial
+name: Initial Conditions List
+description: Initial Conditions List - Application phase
+category: data_validation
+stage: back_stage
+actor: processor
+channel: web
+phase: Application
+estimated_duration_minutes: 30
+dependencies:
+  requires:
+  - atom-bo-app-09-income-normalize
+  - atom-bo-app-10-asset-normalize
+  enables:
+  - atom-bo-app-12-disclosures-generate
+data_outputs:
+- field: conditions_list
+  destination: storage
+  format: array
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.111315'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.111319'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 2
+sla_unit: hours
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

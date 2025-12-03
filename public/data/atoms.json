@@ -1,0 +1,3886 @@
+{
+  "atoms": [
+    {
+      "id": "atom-cust-proc-05-appraisal-access",
+      "name": "Grant Appraisal Access",
+      "stage": "front_stage",
+      "phase": "Processing",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "phone",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-08-appraisal-order"
+        ],
+        "enables": [
+          "atom-bo-proc-09-appraisal-conduct"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "appraisal_access_granted",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-pre-02-credit-consent",
+      "name": "Credit Authorization Consent",
+      "stage": "front_stage",
+      "phase": "Pre-Qualification",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 15,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-pre-01-inquiry"
+        ],
+        "enables": [
+          "atom-sys-pre-01-soft-credit"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FCRA",
+          "section": "15 USC 1681",
+          "description": "Permissible purpose"
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "soft_credit_authorized",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-income-w2-upload",
+      "name": null,
+      "stage": null,
+      "phase": null,
+      "category": null,
+      "actor": "customer",
+      "channel": "web",
+      "estimated_duration_minutes": 0,
+      "sla_hours": 24,
+      "dependencies": {},
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        "Document IDs in DMS",
+        "Upload timestamp",
+        "File metadata (size, type, pages)",
+        "OCR extracted text for income amounts"
+      ]
+    },
+    {
+      "id": "atom-cust-pre-01-inquiry",
+      "name": "Mortgage Inquiry",
+      "stage": "front_stage",
+      "phase": "Pre-Qualification",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [],
+        "enables": [
+          "atom-cust-pre-02-credit-consent",
+          "atom-bo-pre-02-lead-capture"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "inquiry_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-close-01-attend-closing",
+      "name": "Attend Closing",
+      "stage": "front_stage",
+      "phase": "Closing",
+      "category": "waiting_state",
+      "actor": "borrower",
+      "channel": "in_person",
+      "estimated_duration_minutes": 120,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-cd-02-closing-confirm"
+        ],
+        "enables": [
+          "atom-cust-close-02-sign-docs"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-006-doc-upload",
+      "name": "Upload Documents",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-sys-004-email-doc-request"
+        ],
+        "enables": [
+          "atom-bo-005-doc-review"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "high",
+        "emotional_impact": "neutral",
+        "nps_impact": -5,
+        "pain_points": [
+          "Finding documents",
+          "Scanning/photos",
+          "Upload errors"
+        ],
+        "delight_opportunities": [
+          "Mobile upload",
+          "Progress tracking",
+          "Checklist clarity"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-app-10-upload-docs",
+      "name": "Document Upload",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-09-credit-auth"
+        ],
+        "enables": [
+          "atom-bo-app-03-doc-review"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "documents_uploaded",
+          "destination": "storage",
+          "format": "array"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-uw-01-condition-notice",
+      "name": "Receive Underwriting Conditions",
+      "stage": "front_stage",
+      "phase": "Underwriting",
+      "category": "communication_receipt",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-03-issue-conditions"
+        ],
+        "enables": [
+          "atom-cust-uw-02-satisfy-conditions"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-uw-02-satisfy-conditions",
+      "name": "Submit Condition Responses",
+      "stage": "front_stage",
+      "phase": "Underwriting",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 180,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-uw-01-condition-notice"
+        ],
+        "enables": [
+          "atom-bo-uw-04-condition-review"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "condition_response_submitted",
+          "destination": "storage",
+          "format": "array"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-005-app-submit",
+      "name": "Submit Application",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 10,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-004-full-app-start"
+        ],
+        "enables": [
+          "atom-bo-003-app-review",
+          "atom-sys-003-hard-credit"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "12 CFR 1026.19(e)",
+          "description": "Application submission triggers 3-day LE deadline",
+          "deadline_days": 3
+        },
+        {
+          "regulation": "ECOA",
+          "section": "12 CFR 1002.9",
+          "description": "Starts 30-day adverse action timeline",
+          "deadline_days": 30
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "positive",
+        "nps_impact": 5,
+        "pain_points": [
+          "Uncertainty about next steps"
+        ],
+        "delight_opportunities": [
+          "Immediate confirmation",
+          "Clear timeline",
+          "Upload checklist"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-app-07-declarations",
+      "name": "Borrower Declarations",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-06-asset-details"
+        ],
+        "enables": [
+          "atom-cust-app-08-consents"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "declarations_answered",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-proc-03-employment-verify",
+      "name": "Authorize VOE",
+      "stage": "front_stage",
+      "phase": "Processing",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-02-gather-docs"
+        ],
+        "enables": [
+          "atom-bo-proc-05-voe-order"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "voe_authorized",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-008-intent-proceed",
+      "name": "Intent to Proceed",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "decision_point",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 5,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-007-le-review"
+        ],
+        "enables": [
+          "atom-bo-007-fee-collection",
+          "atom-bo-008-appraisal-order"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "12 CFR 1026.19(e)(2)(i)(A)",
+          "description": "Borrower must indicate intent to proceed before fees collected",
+          "deadline_days": 0
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "low",
+        "emotional_impact": "positive",
+        "nps_impact": 7,
+        "pain_points": [],
+        "delight_opportunities": [
+          "Clear next steps",
+          "Processing timeline"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-pre-04-approval-delivery",
+      "name": "Preliminary Approval Delivery",
+      "stage": "front_stage",
+      "phase": "Pre-Qualification",
+      "category": "communication_receipt",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 5,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-pre-01-preliminary-approval",
+          "atom-bo-pre-02-lead-capture"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-app-06-asset-details",
+      "name": "Asset and Liability Details",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-05-employment-details"
+        ],
+        "enables": [
+          "atom-cust-app-07-declarations"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "asset_liability_details",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-app-04-property-details",
+      "name": "Property Details",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-03-borrower-details"
+        ],
+        "enables": [
+          "atom-cust-app-05-employment-details"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "property_details",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-003-preq-letter",
+      "name": "Receive Pre-Qualification Letter",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "communication_receipt",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 5,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-sys-002-email-preq"
+        ],
+        "enables": [
+          "atom-cust-004-full-app-start"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "low",
+        "emotional_impact": "positive",
+        "nps_impact": 8,
+        "pain_points": [],
+        "delight_opportunities": [
+          "Clear next steps",
+          "Mobile-friendly format"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-uw-03-approval-accept",
+      "name": "Accept Final Approval",
+      "stage": "front_stage",
+      "phase": "Underwriting",
+      "category": "decision_point",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-05-clear-to-close"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "approval_accepted",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-pre-03-quick-qualifier",
+      "name": "Quick Qualifier Questions",
+      "stage": "front_stage",
+      "phase": "Pre-Qualification",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-pre-01-inquiry"
+        ],
+        "enables": [
+          "atom-bo-pre-01-preliminary-approval"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "quick_qualifier_responses",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-close-03-wire-verify",
+      "name": "Verify Wire Transfer",
+      "stage": "front_stage",
+      "phase": "Closing",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "phone",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-close-02-fund-setup"
+        ],
+        "enables": [
+          "atom-bo-close-03-recording"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-proc-04-asset-verify",
+      "name": "Authorize VOA",
+      "stage": "front_stage",
+      "phase": "Processing",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-02-gather-docs"
+        ],
+        "enables": [
+          "atom-bo-proc-06-voa-order"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "voa_authorized",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-007-le-review",
+      "name": "Loan Estimate Review",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 20,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-sys-005-le-delivery"
+        ],
+        "enables": [
+          "atom-cust-008-intent-proceed"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0,
+        "pain_points": [
+          "Complex terminology",
+          "Cost surprise"
+        ],
+        "delight_opportunities": [
+          "Interactive LE",
+          "Video explanation",
+          "LO call"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-004-full-app-start",
+      "name": "Start Full Application (1003)",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 45,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-003-preq-letter"
+        ],
+        "enables": [
+          "atom-cust-005-app-submit"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "HMDA",
+          "section": "12 CFR 1003",
+          "description": "Collect demographic information (optional for borrower)",
+          "deadline_days": 0
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "high",
+        "emotional_impact": "neutral",
+        "nps_impact": -3,
+        "pain_points": [
+          "Form length",
+          "Data entry burden",
+          "Technical jargon"
+        ],
+        "delight_opportunities": [
+          "Save and resume",
+          "Auto-fill from pre-qual",
+          "Tooltips"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-app-11-app-submit",
+      "name": "Application Submission",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 10,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-10-upload-docs"
+        ],
+        "enables": [
+          "atom-bo-app-02-initial-screening"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-proc-01-doc-request",
+      "name": "Receive Document Request",
+      "stage": "front_stage",
+      "phase": "Processing",
+      "category": "communication_receipt",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [],
+        "enables": [
+          "atom-cust-proc-02-gather-docs"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-app-02-profile",
+      "name": "Borrower Basic Profile",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 45,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-01-intake-queue"
+        ],
+        "enables": [
+          "atom-cust-app-03-borrower-details"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "HMDA",
+          "section": "12 CFR 1003",
+          "description": "Demographic collection"
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "borrower_basic_profile",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-cd-02-closing-confirm",
+      "name": "Closing Confirmation",
+      "stage": "front_stage",
+      "phase": "Closing",
+      "category": "communication_receipt",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-07-closing-schedule"
+        ],
+        "enables": [
+          "atom-cust-close-01-attend-closing"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-cd-01-cd-acknowledge",
+      "name": "Acknowledge CD Receipt",
+      "stage": "front_stage",
+      "phase": "Closing_Disclosure",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-02-cd-delivery"
+        ],
+        "enables": [
+          "atom-bo-cd-06-closing-packet-prep"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "cd_acknowledged",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-fund-01-loan-complete",
+      "name": "Loan Funded Notification",
+      "stage": "front_stage",
+      "phase": "Funding",
+      "category": "communication_receipt",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-fund-01-transfer-servicing"
+        ],
+        "enables": [
+          "atom-cust-fund-02-first-payment"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-app-08-consents",
+      "name": "Legal Consents",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 15,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-07-declarations"
+        ],
+        "enables": [
+          "atom-cust-app-09-credit-auth"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "GLBA",
+          "section": "Privacy notice",
+          "description": "Financial privacy"
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "consents_accepted",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-proc-02-gather-docs",
+      "name": "Gather and Upload Documents",
+      "stage": "front_stage",
+      "phase": "Processing",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-01-doc-request"
+        ],
+        "enables": [
+          "atom-bo-proc-01-completeness-audit"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "documents_collected",
+          "destination": "storage",
+          "format": "array"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-app-09-credit-auth",
+      "name": "Credit Report Authorization",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 10,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-08-consents"
+        ],
+        "enables": [
+          "atom-cust-app-10-upload-docs",
+          "atom-sys-app-03-credit-request"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FCRA",
+          "section": "Credit authorization",
+          "description": "Hard pull consent"
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "credit_auth_given",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-app-03-borrower-details",
+      "name": "Borrower Detailed Information",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-02-profile"
+        ],
+        "enables": [
+          "atom-cust-app-04-property-details"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "ECOA",
+          "section": "12 CFR 1002",
+          "description": "No discrimination"
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "borrower_profile_normalized",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-fund-02-first-payment",
+      "name": "First Payment Instructions",
+      "stage": "front_stage",
+      "phase": "Funding",
+      "category": "communication_receipt",
+      "actor": "borrower",
+      "channel": "email",
+      "estimated_duration_minutes": 120,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-fund-01-loan-complete"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-app-submit",
+      "name": null,
+      "stage": null,
+      "phase": null,
+      "category": null,
+      "actor": "customer",
+      "channel": "web",
+      "estimated_duration_minutes": 0,
+      "sla_hours": 0.5,
+      "dependencies": {},
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        "Application ID",
+        "Borrower contact information",
+        "Property address and loan amount",
+        "Initial disclosure timestamp"
+      ]
+    },
+    {
+      "id": "atom-cust-close-02-sign-docs",
+      "name": "Sign Closing Documents",
+      "stage": "front_stage",
+      "phase": "Closing",
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "in_person",
+      "estimated_duration_minutes": 60,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-close-01-attend-closing"
+        ],
+        "enables": [
+          "atom-bo-close-01-doc-processing"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "ESIGN",
+          "section": "Requirements",
+          "description": "Signature capture"
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "documents_signed",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-app-05-employment-details",
+      "name": "Employment Details",
+      "stage": "front_stage",
+      "phase": "Application",
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 45,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-04-property-details"
+        ],
+        "enables": [
+          "atom-cust-app-06-asset-details"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Ability to Repay",
+          "description": "Income verification"
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "medium",
+        "emotional_impact": "neutral",
+        "nps_impact": 0
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "employment_details",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-cust-002-consent-credit",
+      "name": "Credit Authorization Consent",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "acknowledgment",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 5,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-001-inquiry"
+        ],
+        "enables": [
+          "atom-sys-001-soft-credit"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FCRA",
+          "section": "15 USC 1681",
+          "description": "Requires borrower consent before credit pull",
+          "deadline_days": 0
+        }
+      ],
+      "customer_experience": {
+        "effort_level": "low",
+        "emotional_impact": "neutral",
+        "nps_impact": 0,
+        "pain_points": [
+          "Legal language complexity"
+        ],
+        "delight_opportunities": [
+          "Clear explanation of soft vs hard pull"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-cust-001-inquiry",
+      "name": "Initial Loan Inquiry",
+      "stage": "front_stage",
+      "phase": null,
+      "category": "information_submission",
+      "actor": "borrower",
+      "channel": "web",
+      "estimated_duration_minutes": 10,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [],
+        "enables": [
+          "atom-cust-002-consent-credit",
+          "atom-bo-001-assign-lo"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {
+        "effort_level": "low",
+        "emotional_impact": "positive",
+        "nps_impact": 5,
+        "pain_points": [],
+        "delight_opportunities": [
+          "Quick response time",
+          "Personalized greeting"
+        ]
+      },
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "property_type",
+          "destination": "storage",
+          "format": "string"
+        },
+        {
+          "field": "loan_amount",
+          "destination": "storage",
+          "format": "number"
+        },
+        {
+          "field": "contact_info",
+          "destination": "storage",
+          "format": "object"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-cd-01-cd-generation",
+      "name": "Generate Closing Disclosure",
+      "stage": "back_stage",
+      "phase": "Closing_Disclosure",
+      "category": "calculation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-05-clear-to-close"
+        ],
+        "enables": [
+          "atom-bo-cd-02-cd-delivery"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Closing Disclosure",
+          "description": "CD generation"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "closing_disclosure_pdf",
+          "destination": "storage",
+          "format": "pdf"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-pre-01-preliminary-approval",
+      "name": "Preliminary Approval Generation",
+      "stage": "back_stage",
+      "phase": "Pre-Qualification",
+      "category": "calculation",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 15,
+      "sla_hours": 0.25,
+      "dependencies": {
+        "requires": [
+          "atom-sys-pre-02-credit-parse",
+          "atom-cust-pre-03-quick-qualifier"
+        ],
+        "enables": [
+          "atom-cust-pre-04-approval-delivery"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "preliminary_approval_status",
+          "destination": "storage",
+          "format": "string"
+        },
+        {
+          "field": "preapproval_letter",
+          "destination": "storage",
+          "format": "pdf"
+        }
+      ]
+    },
+    {
+      "id": "atom-fund-07-loan-archived",
+      "name": "Loan Lifecycle Complete",
+      "stage": "back_stage",
+      "phase": "Funding",
+      "category": "compliance_check",
+      "actor": "funder",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 0.5,
+      "dependencies": {
+        "requires": [
+          "atom-fund-06-quality-assurance"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "loan_lifecycle_complete",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-proc-02-document-review",
+      "name": "Document Review and Classification",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "document_review",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 180,
+      "sla_hours": 24,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-01-completeness-audit"
+        ],
+        "enables": [
+          "atom-bo-proc-03-document-processing"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "doc_review_notes",
+          "destination": "storage",
+          "format": "text"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-005-doc-review",
+      "name": "Document Review and Classification",
+      "stage": "back_stage",
+      "phase": null,
+      "category": "document_review",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 45,
+      "sla_hours": 24,
+      "dependencies": {
+        "requires": [
+          "atom-cust-006-doc-upload"
+        ],
+        "enables": [
+          "atom-bo-006-le-preparation"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "semi_automated",
+        "error_rate_percent": 10.0,
+        "rework_rate_percent": 25.0,
+        "bottleneck_risk": "high"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-app-12-disclosures-generate",
+      "name": "Generate Initial Disclosures",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "calculation",
+      "actor": "loan_officer",
+      "channel": "web",
+      "estimated_duration_minutes": 90,
+      "sla_hours": 4,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-11-conditions-initial"
+        ],
+        "enables": [
+          "atom-bo-app-13-disclosures-send"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Loan Estimate",
+          "description": "3-day requirement"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "disclosures_generated",
+          "destination": "storage",
+          "format": "pdf"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-uw-decision",
+      "name": null,
+      "stage": null,
+      "phase": null,
+      "category": null,
+      "actor": "underwriter",
+      "channel": "web",
+      "estimated_duration_minutes": 0,
+      "sla_hours": 48,
+      "dependencies": {},
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        "Credit decision (approved/suspended/denied)",
+        "List of conditions (if conditional approval)",
+        "Underwriting narrative/notes",
+        "Decision timestamp",
+        "Underwriter ID and signature"
+      ]
+    },
+    {
+      "id": "atom-bo-pre-02-lead-capture",
+      "name": "Lead Capture and Routing",
+      "stage": "back_stage",
+      "phase": "Pre-Qualification",
+      "category": "handoff",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-cust-pre-01-inquiry"
+        ],
+        "enables": [
+          "atom-cust-pre-04-approval-delivery"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "crm_lead_id",
+          "destination": "storage",
+          "format": "string"
+        },
+        {
+          "field": "assigned_lo",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-006-le-preparation",
+      "name": "Loan Estimate Preparation",
+      "stage": "back_stage",
+      "phase": null,
+      "category": "calculation",
+      "actor": "loan_officer",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 48,
+      "dependencies": {
+        "requires": [
+          "atom-bo-005-doc-review"
+        ],
+        "enables": [
+          "atom-sys-005-le-delivery"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "12 CFR 1026.19(e)",
+          "description": "LE must be delivered within 3 business days of application",
+          "deadline_days": 3
+        },
+        {
+          "regulation": "RESPA",
+          "section": "12 CFR 1024.7",
+          "description": "Good faith estimate of closing costs",
+          "deadline_days": 3
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "semi_automated",
+        "error_rate_percent": 12.0,
+        "rework_rate_percent": 18.0,
+        "bottleneck_risk": "high"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-fund-06-quality-assurance",
+      "name": "Post-Funding QA",
+      "stage": "back_stage",
+      "phase": "Funding",
+      "category": "compliance_check",
+      "actor": "funder",
+      "channel": "web",
+      "estimated_duration_minutes": 240,
+      "sla_hours": 4,
+      "dependencies": {
+        "requires": [
+          "atom-fund-03-document-archive"
+        ],
+        "enables": [
+          "atom-fund-07-loan-archived"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Audit Requirements",
+          "description": "QA review"
+        },
+        {
+          "regulation": "Fannie Mae",
+          "section": "QA",
+          "description": "Quality control"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-uw-02-underwriter-review",
+      "name": "Underwriter File Review",
+      "stage": "back_stage",
+      "phase": "Underwriting",
+      "category": "document_review",
+      "actor": "underwriter",
+      "channel": "web",
+      "estimated_duration_minutes": 240,
+      "sla_hours": 24,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-01-submission"
+        ],
+        "enables": [
+          "atom-bo-uw-03-issue-conditions",
+          "atom-bo-uw-06-appraisal-review",
+          "atom-sys-uw-01-dti-calc"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "Fannie Mae",
+          "section": "Selling Guide",
+          "description": "UW standards"
+        },
+        {
+          "regulation": "Freddie Mac",
+          "section": "Selling Guide",
+          "description": "UW guidelines"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-income-calculation",
+      "name": null,
+      "stage": null,
+      "phase": null,
+      "category": null,
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 0,
+      "sla_hours": 4,
+      "dependencies": {},
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        "Qualifying monthly income (total)",
+        "Income by type breakdown",
+        "Calculation worksheet",
+        "Methodology notes"
+      ]
+    },
+    {
+      "id": "atom-bo-app-06-credit-review",
+      "name": "Credit Report Review",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "document_review",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-sys-app-04-credit-response"
+        ],
+        "enables": [
+          "atom-bo-app-07-liability-import"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-app-03-doc-review",
+      "name": "Document Review",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "document_review",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 4,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-10-upload-docs"
+        ],
+        "enables": [
+          "atom-bo-app-08-doc-storage"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-app-13-disclosures-send",
+      "name": "Send Disclosures to Customer",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "external_request",
+      "actor": "loan_officer",
+      "channel": "email",
+      "estimated_duration_minutes": 15,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-12-disclosures-generate"
+        ],
+        "enables": [
+          "atom-sys-app-05-esign-sync"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-income-review",
+      "name": null,
+      "stage": null,
+      "phase": null,
+      "category": null,
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 0,
+      "sla_hours": 8,
+      "dependencies": {},
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        "Review timestamp",
+        "Document acceptance status",
+        "Notes on discrepancies or concerns",
+        "Additional document requests (if any)"
+      ]
+    },
+    {
+      "id": "atom-bo-app-01-intake-queue",
+      "name": "Application Intake Queue",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "queue_management",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 0.5,
+      "dependencies": {
+        "requires": [
+          "atom-sys-app-01-channel-origination"
+        ],
+        "enables": [
+          "atom-cust-app-02-profile"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-proc-03-document-processing",
+      "name": "Document Processing",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-02-document-review"
+        ],
+        "enables": [
+          "atom-bo-proc-04-data-input"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "extracted_document_data",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-cd-04-cd-questions",
+      "name": "Answer CD Questions",
+      "stage": "back_stage",
+      "phase": "Closing_Disclosure",
+      "category": "external_request",
+      "actor": "loan_officer",
+      "channel": "phone",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 4,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-03-cd-review-period"
+        ],
+        "enables": [
+          "atom-bo-cd-05-cd-reconcile"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-app-11-conditions-initial",
+      "name": "Initial Conditions List",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-09-income-normalize",
+          "atom-bo-app-10-asset-normalize"
+        ],
+        "enables": [
+          "atom-bo-app-12-disclosures-generate"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "conditions_list",
+          "destination": "storage",
+          "format": "array"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-cd-03-cd-review-period",
+      "name": "CD 3-Day Review Period",
+      "stage": "back_stage",
+      "phase": "Closing_Disclosure",
+      "category": "compliance_check",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 4320,
+      "sla_hours": 72,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-02-cd-delivery"
+        ],
+        "enables": [
+          "atom-bo-cd-04-cd-questions"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Delivery Requirement",
+          "description": "Mandatory wait"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "cd_review_period_complete",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-close-04-final-verification",
+      "name": "Final Verification",
+      "stage": "back_stage",
+      "phase": "Closing",
+      "category": "compliance_check",
+      "actor": "closer",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-close-03-recording"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "loan_closed_timestamp",
+          "destination": "storage",
+          "format": "datetime"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-cd-02-cd-delivery",
+      "name": "Deliver CD to Customer",
+      "stage": "back_stage",
+      "phase": "Closing_Disclosure",
+      "category": "external_request",
+      "actor": "processor",
+      "channel": "email",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-01-cd-generation"
+        ],
+        "enables": [
+          "atom-bo-cd-03-cd-review-period"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Delivery Requirement",
+          "description": "3-day rule"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "cd_delivery_timestamp",
+          "destination": "storage",
+          "format": "datetime"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-cd-05-cd-reconcile",
+      "name": "Reconcile Closing Costs",
+      "stage": "back_stage",
+      "phase": "Closing_Disclosure",
+      "category": "calculation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-04-cd-questions"
+        ],
+        "enables": [
+          "atom-bo-cd-06-closing-packet-prep"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Tolerance Provisions",
+          "description": "Cost accuracy"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-proc-09-appraisal-conduct",
+      "name": "Appraisal Conducted",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "external_request",
+      "actor": "third_party",
+      "channel": "in_person",
+      "estimated_duration_minutes": 480,
+      "sla_hours": 120,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-05-appraisal-access"
+        ],
+        "enables": [
+          "atom-bo-proc-11-appraisal-received"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-002-preq-calc",
+      "name": "Pre-Qualification Calculation",
+      "stage": "back_stage",
+      "phase": null,
+      "category": "calculation",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 5,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-sys-001-soft-credit",
+          "atom-bo-001-assign-lo"
+        ],
+        "enables": [
+          "atom-sys-002-email-preq"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "automated",
+        "error_rate_percent": 2.0,
+        "rework_rate_percent": 5.0,
+        "bottleneck_risk": "low"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-app-08-doc-storage",
+      "name": "Document Storage",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 10,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-03-doc-review"
+        ],
+        "enables": [
+          "atom-bo-app-09-income-normalize"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-proc-08-appraisal-order",
+      "name": "Order Appraisal",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "external_request",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-04-data-input"
+        ],
+        "enables": [
+          "atom-cust-proc-05-appraisal-access"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FDIC",
+          "section": "Appraisal Requirements",
+          "description": "Collateral valuation"
+        },
+        {
+          "regulation": "Fannie Mae",
+          "section": "Selling Guide",
+          "description": "Appraisal standards"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "appraisal_order_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-003-app-review",
+      "name": "Application Initial Review",
+      "stage": "back_stage",
+      "phase": null,
+      "category": "document_review",
+      "actor": "loan_officer",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 4,
+      "dependencies": {
+        "requires": [
+          "atom-cust-005-app-submit",
+          "atom-sys-003-hard-credit"
+        ],
+        "enables": [
+          "atom-bo-004-doc-request"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "semi_automated",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 15.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-001-assign-lo",
+      "name": "Loan Officer Assignment",
+      "stage": "back_stage",
+      "phase": null,
+      "category": "handoff",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 1,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-cust-001-inquiry"
+        ],
+        "enables": [
+          "atom-bo-002-preq-calc"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "automated",
+        "error_rate_percent": 0.5,
+        "rework_rate_percent": 1.0,
+        "bottleneck_risk": "low"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-cd-07-closing-schedule",
+      "name": "Schedule Closing",
+      "stage": "back_stage",
+      "phase": "Closing_Disclosure",
+      "category": "external_request",
+      "actor": "processor",
+      "channel": "phone",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-06-closing-packet-prep"
+        ],
+        "enables": [
+          "atom-cust-cd-02-closing-confirm"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "closing_appointment_scheduled",
+          "destination": "storage",
+          "format": "datetime"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-app-15-intake-complete",
+      "name": "Application Intake Complete",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "handoff",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 15,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-14-esign-monitor"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-fund-03-document-archive",
+      "name": "Archive Loan File",
+      "stage": "back_stage",
+      "phase": "Funding",
+      "category": "compliance_check",
+      "actor": "funder",
+      "channel": "web",
+      "estimated_duration_minutes": 480,
+      "sla_hours": 8,
+      "dependencies": {
+        "requires": [
+          "atom-fund-02-investor-delivery"
+        ],
+        "enables": [
+          "atom-fund-06-quality-assurance"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FCRA",
+          "section": "Records Retention",
+          "description": "Document storage"
+        },
+        {
+          "regulation": "Fannie Mae",
+          "section": "Retention",
+          "description": "Archive requirements"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-app-05-fraud-screen",
+      "name": "Fraud Screening",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "compliance_check",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 15,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-sys-app-02-kyc-verify",
+          "atom-bo-app-04-data-quality"
+        ],
+        "enables": [
+          "atom-sys-app-03-credit-request"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FACTA",
+          "section": "Red Flags",
+          "description": "Fraud detection"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "fraud_score",
+          "destination": "storage",
+          "format": "number"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-proc-04-data-input",
+      "name": "Data Input to LOS",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 90,
+      "sla_hours": 1.5,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-03-document-processing"
+        ],
+        "enables": [
+          "atom-bo-proc-05-voe-order",
+          "atom-bo-proc-06-voa-order"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "los_data_populated",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-uw-05-clear-to-close",
+      "name": "Issue Clear to Close",
+      "stage": "back_stage",
+      "phase": "Underwriting",
+      "category": "decision",
+      "actor": "underwriter",
+      "channel": "web",
+      "estimated_duration_minutes": 15,
+      "sla_hours": 0.25,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-05-verify-satisfactory"
+        ],
+        "enables": [
+          "atom-cust-uw-03-approval-accept"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "clear_to_close_timestamp",
+          "destination": "storage",
+          "format": "datetime"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-app-07-liability-import",
+      "name": "Liability Import from Credit",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 15,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-06-credit-review"
+        ],
+        "enables": [
+          "atom-bo-app-09-income-normalize"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-app-09-income-normalize",
+      "name": "Income Normalization",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "calculation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 45,
+      "sla_hours": 3,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-07-liability-import",
+          "atom-bo-app-08-doc-storage"
+        ],
+        "enables": [
+          "atom-bo-app-11-conditions-initial"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "Fannie Mae",
+          "section": "B3-3",
+          "description": "Income calculation"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "income_normalized",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-close-03-recording",
+      "name": "Record with County",
+      "stage": "back_stage",
+      "phase": "Closing",
+      "category": "external_request",
+      "actor": "closer",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-cust-close-03-wire-verify"
+        ],
+        "enables": [
+          "atom-bo-close-04-final-verification"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "documents_recorded",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-proc-07-ti-order",
+      "name": "Order Title Insurance",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "external_request",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-04-data-input"
+        ],
+        "enables": [
+          "atom-bo-proc-10-ti-report"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Title Insurance",
+          "description": "Disclosure"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "title_order_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-uw-05-verify-satisfactory",
+      "name": "Verify Conditions Satisfied",
+      "stage": "back_stage",
+      "phase": "Underwriting",
+      "category": "decision",
+      "actor": "underwriter",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-04-condition-review"
+        ],
+        "enables": [
+          "atom-bo-uw-05-clear-to-close"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "condition_verification_result",
+          "destination": "storage",
+          "format": "enum"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-uw-03-issue-conditions",
+      "name": "Issue Conditions",
+      "stage": "back_stage",
+      "phase": "Underwriting",
+      "category": "decision",
+      "actor": "underwriter",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-02-underwriter-review"
+        ],
+        "enables": [
+          "atom-cust-uw-01-condition-notice"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "underwriting_decision",
+          "destination": "storage",
+          "format": "enum"
+        },
+        {
+          "field": "conditions_issued",
+          "destination": "storage",
+          "format": "array"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-007-fee-collection",
+      "name": "Collect Application and Credit Fees",
+      "stage": "back_stage",
+      "phase": null,
+      "category": "data_validation",
+      "actor": "loan_officer",
+      "channel": "web",
+      "estimated_duration_minutes": 10,
+      "sla_hours": 4,
+      "dependencies": {
+        "requires": [
+          "atom-cust-008-intent-proceed"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "semi_automated",
+        "error_rate_percent": 2.0,
+        "rework_rate_percent": 5.0,
+        "bottleneck_risk": "low"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-proc-10-ti-report",
+      "name": "Title Insurance Report",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "external_request",
+      "actor": "third_party",
+      "channel": "email",
+      "estimated_duration_minutes": 360,
+      "sla_hours": 72,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-07-ti-order"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-close-01-doc-processing",
+      "name": "Process Signed Documents",
+      "stage": "back_stage",
+      "phase": "Closing",
+      "category": "document_review",
+      "actor": "closer",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 0.5,
+      "dependencies": {
+        "requires": [
+          "atom-cust-close-02-sign-docs"
+        ],
+        "enables": [
+          "atom-bo-close-02-fund-setup"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "closing_docs_complete",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-app-04-data-quality",
+      "name": "Data Quality Check",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 20,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-02-initial-screening"
+        ],
+        "enables": [
+          "atom-bo-app-05-fraud-screen"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-proc-01-completeness-audit",
+      "name": "Completeness Audit",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-02-gather-docs"
+        ],
+        "enables": [
+          "atom-bo-proc-02-document-review"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Application Completeness",
+          "description": "Documentation"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "completeness_status",
+          "destination": "storage",
+          "format": "enum"
+        }
+      ]
+    },
+    {
+      "id": "atom-fund-02-investor-delivery",
+      "name": "Deliver to Investor",
+      "stage": "back_stage",
+      "phase": "Funding",
+      "category": "external_request",
+      "actor": "funder",
+      "channel": "api",
+      "estimated_duration_minutes": 480,
+      "sla_hours": 24,
+      "dependencies": {
+        "requires": [
+          "atom-fund-01-transfer-servicing"
+        ],
+        "enables": [
+          "atom-fund-03-document-archive"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "investor_delivery_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-uw-06-appraisal-review",
+      "name": "Appraisal Review",
+      "stage": "back_stage",
+      "phase": "Underwriting",
+      "category": "document_review",
+      "actor": "underwriter",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-02-underwriter-review",
+          "atom-bo-proc-11-appraisal-received"
+        ],
+        "enables": [
+          "atom-bo-uw-03-issue-conditions"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "appraisal_acceptable",
+          "destination": "storage",
+          "format": "boolean"
+        },
+        {
+          "field": "appraisal_notes",
+          "destination": "storage",
+          "format": "text"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-proc-06-voa-order",
+      "name": "Order VOA",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "external_request",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-04-asset-verify",
+          "atom-bo-proc-04-data-input"
+        ],
+        "enables": [
+          "atom-sys-proc-03-voa-track"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "voa_request_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-proc-11-appraisal-received",
+      "name": "Appraisal Report Received",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "document_review",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-09-appraisal-conduct"
+        ],
+        "enables": []
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-close-02-fund-setup",
+      "name": "Setup Funding",
+      "stage": "back_stage",
+      "phase": "Closing",
+      "category": "calculation",
+      "actor": "closer",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-bo-close-01-doc-processing"
+        ],
+        "enables": [
+          "atom-cust-close-03-wire-verify"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "closing_funds_collected",
+          "destination": "storage",
+          "format": "number"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-cd-06-closing-packet-prep",
+      "name": "Prepare Closing Packet",
+      "stage": "back_stage",
+      "phase": "Closing_Disclosure",
+      "category": "document_review",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-cd-05-cd-reconcile",
+          "atom-cust-cd-01-cd-acknowledge"
+        ],
+        "enables": [
+          "atom-bo-cd-07-closing-schedule"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "closing_packet_prepared",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-proc-05-voe-order",
+      "name": "Order VOE",
+      "stage": "back_stage",
+      "phase": "Processing",
+      "category": "external_request",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-03-employment-verify",
+          "atom-bo-proc-04-data-input"
+        ],
+        "enables": [
+          "atom-sys-proc-02-voe-track"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "voe_request_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-app-14-esign-monitor",
+      "name": "Monitor E-Signature Status",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 24,
+      "dependencies": {
+        "requires": [
+          "atom-sys-app-05-esign-sync"
+        ],
+        "enables": [
+          "atom-bo-app-15-intake-complete"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "esign_status",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-uw-04-condition-review",
+      "name": "Review Condition Responses",
+      "stage": "back_stage",
+      "phase": "Underwriting",
+      "category": "document_review",
+      "actor": "underwriter",
+      "channel": "web",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 4,
+      "dependencies": {
+        "requires": [
+          "atom-cust-uw-02-satisfy-conditions"
+        ],
+        "enables": [
+          "atom-bo-uw-05-verify-satisfactory"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "condition_satisfaction_status",
+          "destination": "storage",
+          "format": "enum"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-uw-01-submission",
+      "name": "Submit to Underwriting",
+      "stage": "back_stage",
+      "phase": "Underwriting",
+      "category": "handoff",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 60,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [],
+        "enables": [
+          "atom-bo-uw-02-underwriter-review"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "underwriting_queue_entry",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-fund-01-transfer-servicing",
+      "name": "Transfer to Servicing",
+      "stage": "back_stage",
+      "phase": "Funding",
+      "category": "handoff",
+      "actor": "funder",
+      "channel": "api",
+      "estimated_duration_minutes": 120,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-close-04-final-verification"
+        ],
+        "enables": [
+          "atom-fund-02-investor-delivery"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "servicing_system_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-app-10-asset-normalize",
+      "name": "Asset Normalization",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "calculation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-09-income-normalize"
+        ],
+        "enables": [
+          "atom-bo-app-11-conditions-initial"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "Fannie Mae",
+          "section": "B5-3",
+          "description": "Asset verification"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": [
+        {
+          "field": "assets_normalized",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-bo-app-02-initial-screening",
+      "name": "Initial Application Screening",
+      "stage": "back_stage",
+      "phase": "Application",
+      "category": "data_validation",
+      "actor": "processor",
+      "channel": "web",
+      "estimated_duration_minutes": 30,
+      "sla_hours": 1,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-11-app-submit"
+        ],
+        "enables": [
+          "atom-sys-app-02-kyc-verify",
+          "atom-bo-app-04-data-quality"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "manual",
+        "error_rate_percent": 5.0,
+        "rework_rate_percent": 10.0,
+        "bottleneck_risk": "medium"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-bo-004-doc-request",
+      "name": "Document Request List Generation",
+      "stage": "back_stage",
+      "phase": null,
+      "category": "data_validation",
+      "actor": "loan_officer",
+      "channel": "web",
+      "estimated_duration_minutes": 15,
+      "sla_hours": 2,
+      "dependencies": {
+        "requires": [
+          "atom-bo-003-app-review"
+        ],
+        "enables": [
+          "atom-sys-004-email-doc-request"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {
+        "automation_level": "semi_automated",
+        "error_rate_percent": 8.0,
+        "rework_rate_percent": 20.0,
+        "bottleneck_risk": "low"
+      },
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-005-le-delivery",
+      "name": "Loan Estimate Delivery",
+      "stage": "system",
+      "phase": null,
+      "category": "data_transform",
+      "actor": "system",
+      "channel": "email",
+      "estimated_duration_minutes": 2,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-006-le-preparation"
+        ],
+        "enables": [
+          "atom-cust-007-le-review"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "12 CFR 1026.19(e)(1)(iv)",
+          "description": "LE delivery triggers 10-business-day intent to proceed waiting period",
+          "deadline_days": 10
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-001-soft-credit",
+      "name": "Soft Credit Pull",
+      "stage": "system",
+      "phase": null,
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 2,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-002-consent-credit"
+        ],
+        "enables": [
+          "atom-bo-002-preq-calc"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-proc-03-voa-track",
+      "name": "VOA Response Tracking",
+      "stage": "system",
+      "phase": "Processing",
+      "category": "queue_management",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 240,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-06-voa-order"
+        ],
+        "enables": [
+          "atom-bo-proc-04-data-input"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "voa_response_received",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-002-email-preq",
+      "name": "Pre-Qualification Letter Email",
+      "stage": "system",
+      "phase": null,
+      "category": "data_transform",
+      "actor": "system",
+      "channel": "email",
+      "estimated_duration_minutes": 1,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-002-preq-calc"
+        ],
+        "enables": [
+          "atom-cust-003-preq-letter"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-pre-02-credit-parse",
+      "name": "Credit Data Parsing",
+      "stage": "system",
+      "phase": "Pre-Qualification",
+      "category": "data_transform",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 3,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-sys-pre-01-soft-credit"
+        ],
+        "enables": [
+          "atom-bo-pre-01-preliminary-approval"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "credit_metrics_parsed",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-003-hard-credit",
+      "name": "Hard Credit Pull (Tri-Merge)",
+      "stage": "system",
+      "phase": null,
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 3,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-005-app-submit"
+        ],
+        "enables": [
+          "atom-bo-003-app-review"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FCRA",
+          "section": "15 USC 1681b",
+          "description": "Permissible purpose for credit report",
+          "deadline_days": 0
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-app-02-kyc-verify",
+      "name": "KYC Verification",
+      "stage": "system",
+      "phase": "Application",
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 15,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-02-initial-screening"
+        ],
+        "enables": [
+          "atom-bo-app-05-fraud-screen"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "AML",
+          "section": "KYC Program",
+          "description": "Identity verification"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "kyc_status",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-app-01-channel-origination",
+      "name": "Application Channel Origination",
+      "stage": "system",
+      "phase": "Application",
+      "category": "queue_management",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 1,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [],
+        "enables": [
+          "atom-bo-app-01-intake-queue"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "12 CFR 1026.19(e)",
+          "description": "Application triggers 3-day LE"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "application_id",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-aus-submit",
+      "name": null,
+      "stage": null,
+      "phase": null,
+      "category": null,
+      "actor": "system",
+      "channel": "web",
+      "estimated_duration_minutes": 0,
+      "sla_hours": 0.25,
+      "dependencies": {},
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        "AUS recommendation",
+        "Risk classification",
+        "Required conditions list",
+        "AUS case number",
+        "Finding timestamp"
+      ]
+    },
+    {
+      "id": "atom-sys-uw-02-credit-decision",
+      "name": "Automated Underwriting",
+      "stage": "system",
+      "phase": "Underwriting",
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 120,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-01-submission"
+        ],
+        "enables": [
+          "atom-bo-uw-02-underwriter-review"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "credit_decision_recommendation",
+          "destination": "storage",
+          "format": "string"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-uw-01-dti-calc",
+      "name": "DTI Calculation",
+      "stage": "system",
+      "phase": "Underwriting",
+      "category": "data_transform",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-uw-02-underwriter-review"
+        ],
+        "enables": [
+          "atom-bo-uw-03-issue-conditions"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "TRID",
+          "section": "Ability to Repay",
+          "description": "DTI ratios"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "dti_ratios",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-pre-01-soft-credit",
+      "name": "Soft Credit Pull",
+      "stage": "system",
+      "phase": "Pre-Qualification",
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 6,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-pre-02-credit-consent"
+        ],
+        "enables": [
+          "atom-sys-pre-02-credit-parse"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "soft_credit_score",
+          "destination": "storage",
+          "format": "number"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-app-04-credit-response",
+      "name": "Credit Report Response",
+      "stage": "system",
+      "phase": "Application",
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 30,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-sys-app-03-credit-request"
+        ],
+        "enables": [
+          "atom-bo-app-06-credit-review"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "FCRA",
+          "section": "Permissible purpose",
+          "description": "Hard pull"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "credit_report",
+          "destination": "storage",
+          "format": "json"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-app-03-credit-request",
+      "name": "Credit Report Request",
+      "stage": "system",
+      "phase": "Application",
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 10,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-app-09-credit-auth",
+          "atom-bo-app-05-fraud-screen"
+        ],
+        "enables": [
+          "atom-sys-app-04-credit-response"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-app-05-esign-sync",
+      "name": "E-Signature Sync",
+      "stage": "system",
+      "phase": "Application",
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 5,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-13-disclosures-send"
+        ],
+        "enables": [
+          "atom-bo-app-14-esign-monitor"
+        ]
+      },
+      "regulatory_requirements": [
+        {
+          "regulation": "ESIGN",
+          "section": "Consent",
+          "description": "Electronic signature"
+        }
+      ],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-proc-02-voe-track",
+      "name": "VOE Response Tracking",
+      "stage": "system",
+      "phase": "Processing",
+      "category": "queue_management",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 180,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-proc-05-voe-order"
+        ],
+        "enables": [
+          "atom-bo-proc-04-data-input"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "voe_response_received",
+          "destination": "storage",
+          "format": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-004-email-doc-request",
+      "name": "Email Document Request",
+      "stage": "system",
+      "phase": null,
+      "category": "data_transform",
+      "actor": "system",
+      "channel": "email",
+      "estimated_duration_minutes": 1,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-004-doc-request"
+        ],
+        "enables": [
+          "atom-cust-006-doc-upload"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": []
+    },
+    {
+      "id": "atom-sys-proc-01-doc-ingestion",
+      "name": "Document Ingestion",
+      "stage": "system",
+      "phase": "Processing",
+      "category": "data_transform",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 120,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-cust-proc-02-gather-docs"
+        ],
+        "enables": [
+          "atom-bo-proc-01-completeness-audit"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "dms_document_ids",
+          "destination": "storage",
+          "format": "array"
+        }
+      ]
+    },
+    {
+      "id": "atom-sys-app-06-fraud-engine",
+      "name": "Fraud Detection Engine",
+      "stage": "system",
+      "phase": "Application",
+      "category": "api_call",
+      "actor": "system",
+      "channel": "api",
+      "estimated_duration_minutes": 20,
+      "sla_hours": null,
+      "dependencies": {
+        "requires": [
+          "atom-bo-app-05-fraud-screen"
+        ],
+        "enables": [
+          "atom-bo-app-05-fraud-screen"
+        ]
+      },
+      "regulatory_requirements": [],
+      "customer_experience": {},
+      "process_metrics": {},
+      "data_outputs": [
+        {
+          "field": "fraud_score",
+          "destination": "storage",
+          "format": "number"
+        }
+      ]
+    }
+  ],
+  "generated_at": "2024-01-15T00:00:00Z",
+  "version": "1.0.0",
+  "total_count": 119
+}

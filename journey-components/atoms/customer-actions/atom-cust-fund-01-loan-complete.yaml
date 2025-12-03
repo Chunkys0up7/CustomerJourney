@@ -1,0 +1,28 @@
+id: atom-cust-fund-01-loan-complete
+name: Loan Funded Notification
+description: Loan Funded Notification - Funding phase
+category: communication_receipt
+stage: front_stage
+actor: borrower
+channel: email
+phase: Funding
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-fund-01-transfer-servicing
+  enables:
+  - atom-cust-fund-02-first-payment
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.212040'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.212047'
+  author: Complete Journey Generator
+  description: Generated Funding phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

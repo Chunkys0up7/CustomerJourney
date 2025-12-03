@@ -682,49 +682,20 @@
             }
         }
 
-        // Load all atoms from YAML files
+        // Load all atoms from JSON
         async function loadAtoms() {
-            const atomPaths = [
-                // Customer actions
-                'atom-cust-001-inquiry', 'atom-cust-002-consent-credit', 'atom-cust-003-preq-letter',
-                'atom-cust-004-full-app-start', 'atom-cust-005-app-submit', 'atom-cust-006-doc-upload',
-                'atom-cust-007-le-review', 'atom-cust-008-intent-proceed',
-                // Back-office actions
-                'atom-bo-001-assign-lo', 'atom-bo-002-preq-calc', 'atom-bo-003-app-review',
-                'atom-bo-004-doc-request', 'atom-bo-005-doc-review', 'atom-bo-006-le-preparation',
-                'atom-bo-007-fee-collection',
-                // System actions
-                'atom-sys-001-soft-credit', 'atom-sys-002-email-preq', 'atom-sys-003-hard-credit',
-                'atom-sys-004-email-doc-request', 'atom-sys-005-le-delivery'
-            ];
-
-            // Mock data for now - in production, fetch YAML files
-            allAtoms = atomPaths.map((id, index) => {
-                const stage = id.includes('cust') ? 'front_stage' :
-                             id.includes('bo') ? 'back_stage' : 'system';
-                const phase = index < 7 ? 'Pre-Qualification' :
-                             index < 14 ? 'Application' : 'Disclosure';
-
-                return {
-                    id: id,
-                    name: id.split('-').slice(2).join(' ').replace(/\b\w/g, l => l.toUpperCase()),
-                    stage: stage,
-                    phase: phase,
-                    category: stage === 'front_stage' ? 'information_submission' :
-                             stage === 'back_stage' ? 'data_validation' : 'api_call',
-                    actor: stage === 'front_stage' ? 'borrower' :
-                          stage === 'back_stage' ? 'loan_officer' : 'system',
-                    estimated_duration_minutes: Math.floor(Math.random() * 60) + 5,
-                    sla_hours: stage === 'back_stage' ? Math.floor(Math.random() * 48) + 1 : null,
-                    dependencies: {
-                        requires: index > 0 ? [atomPaths[index - 1]] : [],
-                        enables: index < atomPaths.length - 1 ? [atomPaths[index + 1]] : []
-                    },
-                    regulatory_requirements: Math.random() > 0.7 ? [
-                        { regulation: 'TRID', section: '12 CFR 1026.19' }
-                    ] : []
-                };
-            });
+            try {
+                const response = await fetch('/public/data/atoms.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                allAtoms = data.atoms || [];
+                console.log(`✅ Loaded ${allAtoms.length} atoms from JSON`);
+            } catch (error) {
+                console.error('Failed to load atoms:', error);
+                allAtoms = [];
+            }
         }
 
         async function loadModules() {
@@ -762,16 +733,18 @@
 
         // Render phases list
         function renderPhases() {
-            const phases = ['Pre-Qualification', 'Application', 'Disclosure'];
+            // Get unique phases from loaded atoms
+            const phases = [...new Set(allAtoms.map(a => a.phase).filter(p => p))].sort();
             const phaseList = document.getElementById('phase-list');
 
             phaseList.innerHTML = phases.map(phase => {
                 const atoms = allAtoms.filter(a => a.phase === phase);
-                const module = allModules.find(m => m.name === phase);
+                const totalDuration = atoms.reduce((sum, a) => sum + (a.estimated_duration_minutes || 0), 0);
+                const hours = (totalDuration / 60).toFixed(1);
                 return `
                     <li class="phase-item" onclick="selectPhase('${phase}')">
                         <div class="phase-name">${phase}</div>
-                        <div class="phase-duration">${atoms.length} atoms • ${module?.target_hours || 0}h SLA</div>
+                        <div class="phase-duration">${atoms.length} atoms • ${hours}h total</div>
                     </li>
                 `;
             }).join('');
@@ -867,7 +840,8 @@
 
         // Render Timeline View
         function renderTimelineView(atoms) {
-            const phases = ['Pre-Qualification', 'Application', 'Disclosure'];
+            // Get unique phases dynamically
+            const phases = [...new Set(atoms.map(a => a.phase).filter(p => p))].sort();
 
             document.getElementById('view-content').innerHTML = `
                 <div class="timeline-container">

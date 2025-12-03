@@ -1,0 +1,31 @@
+id: atom-cust-proc-02-gather-docs
+name: Gather and Upload Documents
+description: Gather and Upload Documents - Processing phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Processing
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-cust-proc-01-doc-request
+  enables:
+  - atom-bo-proc-01-completeness-audit
+data_outputs:
+- field: documents_collected
+  destination: storage
+  format: array
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.125366'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.125370'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

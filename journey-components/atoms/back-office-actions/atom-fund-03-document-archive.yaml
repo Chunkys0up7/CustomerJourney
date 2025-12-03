@@ -1,0 +1,38 @@
+id: atom-fund-03-document-archive
+name: Archive Loan File
+description: Archive Loan File - Funding phase
+category: compliance_check
+stage: back_stage
+actor: funder
+channel: web
+phase: Funding
+estimated_duration_minutes: 480
+dependencies:
+  requires:
+  - atom-fund-02-investor-delivery
+  enables:
+  - atom-fund-06-quality-assurance
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.210008'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.210012'
+  author: Complete Journey Generator
+  description: Generated Funding phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 8
+sla_unit: hours
+regulatory_requirements:
+- regulation: FCRA
+  section: Records Retention
+  description: Document storage
+- regulation: Fannie Mae
+  section: Retention
+  description: Archive requirements
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

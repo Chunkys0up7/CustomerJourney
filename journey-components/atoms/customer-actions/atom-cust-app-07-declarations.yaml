@@ -1,0 +1,31 @@
+id: atom-cust-app-07-declarations
+name: Borrower Declarations
+description: Borrower Declarations - Application phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 30
+dependencies:
+  requires:
+  - atom-cust-app-06-asset-details
+  enables:
+  - atom-cust-app-08-consents
+data_outputs:
+- field: declarations_answered
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.080399'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.080405'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

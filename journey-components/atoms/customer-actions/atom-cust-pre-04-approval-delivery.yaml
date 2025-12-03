@@ -1,0 +1,28 @@
+id: atom-cust-pre-04-approval-delivery
+name: Preliminary Approval Delivery
+description: Preliminary Approval Delivery - Pre-Qualification phase
+category: communication_receipt
+stage: front_stage
+actor: borrower
+channel: email
+phase: Pre-Qualification
+estimated_duration_minutes: 5
+dependencies:
+  requires:
+  - atom-bo-pre-01-preliminary-approval
+  - atom-bo-pre-02-lead-capture
+  enables: []
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.065848'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.065852'
+  author: Complete Journey Generator
+  description: Generated Pre-Qualification phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

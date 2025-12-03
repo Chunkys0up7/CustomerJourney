@@ -1,0 +1,31 @@
+id: atom-cust-proc-05-appraisal-access
+name: Grant Appraisal Access
+description: Grant Appraisal Access - Processing phase
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: phone
+phase: Processing
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-bo-proc-08-appraisal-order
+  enables:
+  - atom-bo-proc-09-appraisal-conduct
+data_outputs:
+- field: appraisal_access_granted
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.130727'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.130730'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

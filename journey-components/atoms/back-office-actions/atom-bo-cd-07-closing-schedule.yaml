@@ -1,0 +1,34 @@
+id: atom-bo-cd-07-closing-schedule
+name: Schedule Closing
+description: Schedule Closing - Closing_Disclosure phase
+category: external_request
+stage: back_stage
+actor: processor
+channel: phone
+phase: Closing_Disclosure
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-bo-cd-06-closing-packet-prep
+  enables:
+  - atom-cust-cd-02-closing-confirm
+data_outputs:
+- field: closing_appointment_scheduled
+  destination: storage
+  format: datetime
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.189214'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.189216'
+  author: Complete Journey Generator
+  description: Generated Closing_Disclosure phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 2
+sla_unit: hours
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

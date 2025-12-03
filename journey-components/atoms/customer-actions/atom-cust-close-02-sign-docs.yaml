@@ -1,0 +1,35 @@
+id: atom-cust-close-02-sign-docs
+name: Sign Closing Documents
+description: Sign Closing Documents - Closing phase
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: in_person
+phase: Closing
+estimated_duration_minutes: 60
+dependencies:
+  requires:
+  - atom-cust-close-01-attend-closing
+  enables:
+  - atom-bo-close-01-doc-processing
+data_outputs:
+- field: documents_signed
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.195540'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.195545'
+  author: Complete Journey Generator
+  description: Generated Closing phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: ESIGN
+  section: Requirements
+  description: Signature capture
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

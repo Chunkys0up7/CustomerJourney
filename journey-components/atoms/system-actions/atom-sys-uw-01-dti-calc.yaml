@@ -1,0 +1,37 @@
+id: atom-sys-uw-01-dti-calc
+name: DTI Calculation
+description: DTI Calculation - Underwriting phase
+category: data_transform
+stage: system
+actor: system
+channel: api
+phase: Underwriting
+estimated_duration_minutes: 30
+dependencies:
+  requires:
+  - atom-bo-uw-02-underwriter-review
+  enables:
+  - atom-bo-uw-03-issue-conditions
+data_outputs:
+- field: dti_ratios
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.174640'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.174646'
+  author: Complete Journey Generator
+  description: Generated Underwriting phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: TRID
+  section: Ability to Repay
+  description: DTI ratios
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

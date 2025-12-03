@@ -1,0 +1,33 @@
+id: atom-sys-app-06-fraud-engine
+name: Fraud Detection Engine
+description: Fraud Detection Engine - Application phase
+category: api_call
+stage: system
+actor: system
+channel: api
+phase: Application
+estimated_duration_minutes: 20
+dependencies:
+  requires:
+  - atom-bo-app-05-fraud-screen
+  enables:
+  - atom-bo-app-05-fraud-screen
+data_outputs:
+- field: fraud_score
+  destination: storage
+  format: number
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.122018'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.122024'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

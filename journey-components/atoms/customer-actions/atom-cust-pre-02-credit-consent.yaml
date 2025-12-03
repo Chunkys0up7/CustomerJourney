@@ -1,0 +1,35 @@
+id: atom-cust-pre-02-credit-consent
+name: Credit Authorization Consent
+description: Credit Authorization Consent - Pre-Qualification phase
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: web
+phase: Pre-Qualification
+estimated_duration_minutes: 15
+dependencies:
+  requires:
+  - atom-cust-pre-01-inquiry
+  enables:
+  - atom-sys-pre-01-soft-credit
+data_outputs:
+- field: soft_credit_authorized
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.054750'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.054759'
+  author: Complete Journey Generator
+  description: Generated Pre-Qualification phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: FCRA
+  section: 15 USC 1681
+  description: Permissible purpose
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

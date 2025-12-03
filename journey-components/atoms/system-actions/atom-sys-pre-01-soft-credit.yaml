@@ -1,0 +1,33 @@
+id: atom-sys-pre-01-soft-credit
+name: Soft Credit Pull
+description: Soft Credit Pull - Pre-Qualification phase
+category: api_call
+stage: system
+actor: system
+channel: api
+phase: Pre-Qualification
+estimated_duration_minutes: 6
+dependencies:
+  requires:
+  - atom-cust-pre-02-credit-consent
+  enables:
+  - atom-sys-pre-02-credit-parse
+data_outputs:
+- field: soft_credit_score
+  destination: storage
+  format: number
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.058424'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.058430'
+  author: Complete Journey Generator
+  description: Generated Pre-Qualification phase atom
+  breaking_changes: false
+tags: []
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

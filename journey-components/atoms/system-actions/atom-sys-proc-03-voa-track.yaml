@@ -1,0 +1,33 @@
+id: atom-sys-proc-03-voa-track
+name: VOA Response Tracking
+description: VOA Response Tracking - Processing phase
+category: queue_management
+stage: system
+actor: system
+channel: api
+phase: Processing
+estimated_duration_minutes: 240
+dependencies:
+  requires:
+  - atom-bo-proc-06-voa-order
+  enables:
+  - atom-bo-proc-04-data-input
+data_outputs:
+- field: voa_response_received
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.155367'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.155372'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

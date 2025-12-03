@@ -1,0 +1,38 @@
+id: atom-bo-cd-03-cd-review-period
+name: CD 3-Day Review Period
+description: CD 3-Day Review Period - Closing_Disclosure phase
+category: compliance_check
+stage: back_stage
+actor: processor
+channel: web
+phase: Closing_Disclosure
+estimated_duration_minutes: 4320
+dependencies:
+  requires:
+  - atom-bo-cd-02-cd-delivery
+  enables:
+  - atom-bo-cd-04-cd-questions
+data_outputs:
+- field: cd_review_period_complete
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.182192'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.182198'
+  author: Complete Journey Generator
+  description: Generated Closing_Disclosure phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 72
+sla_unit: hours
+regulatory_requirements:
+- regulation: TRID
+  section: Delivery Requirement
+  description: Mandatory wait
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

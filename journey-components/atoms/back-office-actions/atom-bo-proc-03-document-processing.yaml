@@ -1,0 +1,34 @@
+id: atom-bo-proc-03-document-processing
+name: Document Processing
+description: Document Processing - Processing phase
+category: data_validation
+stage: back_stage
+actor: processor
+channel: web
+phase: Processing
+estimated_duration_minutes: 120
+dependencies:
+  requires:
+  - atom-bo-proc-02-document-review
+  enables:
+  - atom-bo-proc-04-data-input
+data_outputs:
+- field: extracted_document_data
+  destination: storage
+  format: json
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.136002'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.136007'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+sla_hours: 2
+sla_unit: hours
+process_metrics:
+  automation_level: manual
+  error_rate_percent: 5.0
+  rework_rate_percent: 10.0
+  bottleneck_risk: medium

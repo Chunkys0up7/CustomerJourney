@@ -1,0 +1,31 @@
+id: atom-cust-proc-03-employment-verify
+name: Authorize VOE
+description: Authorize VOE - Processing phase
+category: acknowledgment
+stage: front_stage
+actor: borrower
+channel: web
+phase: Processing
+estimated_duration_minutes: 30
+dependencies:
+  requires:
+  - atom-cust-proc-02-gather-docs
+  enables:
+  - atom-bo-proc-05-voe-order
+data_outputs:
+- field: voe_authorized
+  destination: storage
+  format: boolean
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.127179'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.127182'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

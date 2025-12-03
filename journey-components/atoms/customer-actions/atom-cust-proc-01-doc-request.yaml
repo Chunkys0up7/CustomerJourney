@@ -1,0 +1,27 @@
+id: atom-cust-proc-01-doc-request
+name: Receive Document Request
+description: Receive Document Request - Processing phase
+category: communication_receipt
+stage: front_stage
+actor: borrower
+channel: email
+phase: Processing
+estimated_duration_minutes: 60
+dependencies:
+  requires: []
+  enables:
+  - atom-cust-proc-02-gather-docs
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.123854'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.123859'
+  author: Complete Journey Generator
+  description: Generated Processing phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

@@ -1,0 +1,31 @@
+id: atom-sys-app-03-credit-request
+name: Credit Report Request
+description: Credit Report Request - Application phase
+category: api_call
+stage: system
+actor: system
+channel: api
+phase: Application
+estimated_duration_minutes: 10
+dependencies:
+  requires:
+  - atom-cust-app-09-credit-auth
+  - atom-bo-app-05-fraud-screen
+  enables:
+  - atom-sys-app-04-credit-response
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.096525'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.096531'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

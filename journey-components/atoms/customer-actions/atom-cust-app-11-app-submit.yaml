@@ -1,0 +1,28 @@
+id: atom-cust-app-11-app-submit
+name: Application Submission
+description: Application Submission - Application phase
+category: information_submission
+stage: front_stage
+actor: borrower
+channel: web
+phase: Application
+estimated_duration_minutes: 10
+dependencies:
+  requires:
+  - atom-cust-app-10-upload-docs
+  enables:
+  - atom-bo-app-02-initial-screening
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.087326'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.087331'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+customer_experience:
+  effort_level: medium
+  emotional_impact: neutral
+  nps_impact: 0

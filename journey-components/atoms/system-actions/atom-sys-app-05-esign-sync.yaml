@@ -1,0 +1,34 @@
+id: atom-sys-app-05-esign-sync
+name: E-Signature Sync
+description: E-Signature Sync - Application phase
+category: api_call
+stage: system
+actor: system
+channel: api
+phase: Application
+estimated_duration_minutes: 5
+dependencies:
+  requires:
+  - atom-bo-app-13-disclosures-send
+  enables:
+  - atom-bo-app-14-esign-monitor
+data_outputs: []
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.116777'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.116783'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: ESIGN
+  section: Consent
+  description: Electronic signature
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3

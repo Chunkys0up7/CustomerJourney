@@ -1,0 +1,37 @@
+id: atom-sys-app-02-kyc-verify
+name: KYC Verification
+description: KYC Verification - Application phase
+category: api_call
+stage: system
+actor: system
+channel: api
+phase: Application
+estimated_duration_minutes: 15
+dependencies:
+  requires:
+  - atom-bo-app-02-initial-screening
+  enables:
+  - atom-bo-app-05-fraud-screen
+data_outputs:
+- field: kyc_status
+  destination: storage
+  format: string
+version: 1.0.0
+last_updated: '2025-12-03T16:58:45.090807'
+change_log:
+- version: 1.0.0
+  date: '2025-12-03T16:58:45.090813'
+  author: Complete Journey Generator
+  description: Generated Application phase atom
+  breaking_changes: false
+tags: []
+regulatory_requirements:
+- regulation: AML
+  section: KYC Program
+  description: Identity verification
+system_integration:
+  system_name: LOS
+  authentication: api_key
+  timeout_seconds: 30
+  retry_policy: exponential_backoff
+  max_retries: 3
