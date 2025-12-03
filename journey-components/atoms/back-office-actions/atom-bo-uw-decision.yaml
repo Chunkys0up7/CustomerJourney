@@ -1,0 +1,176 @@
+---
+id: atom-bo-uw-decision
+type: atom
+title: Underwriter Issues Decision
+version: 1.0.0
+
+# Classification
+atom_type: back-office-action
+actor: underwriter
+front_stage: true
+customer_visible: true
+
+# Timing
+sla_hours: 48
+criticality: critical
+
+# Description
+description: |
+  Underwriter reviews AUS findings, validates data accuracy, and issues a
+  final credit decision (approved, conditional approval, or denied).
+  This is the culmination of the underwriting process.
+
+# Pre-conditions
+preconditions:
+  - AUS findings received
+  - All required documentation uploaded
+  - Income and assets verified
+  - Credit report reviewed
+  - Property appraisal completed
+  - Title report clear
+
+# Steps
+steps:
+  - step: 1
+    action: Underwriter reviews AUS findings
+    analysis:
+      - AUS recommendation (approve/refer/ineligible)
+      - Risk factors identified by AUS
+      - Required conditions listed
+  - step: 2
+    action: Validate data accuracy in AUS
+    checks:
+      - Income calculation correct
+      - Asset amounts match documentation
+      - Credit data accurate
+      - Property value reasonable
+  - step: 3
+    action: Review all supporting documentation
+    documents:
+      - Income documents (W-2, pay stubs, tax returns)
+      - Asset statements (bank, retirement, investment)
+      - Credit report and explanation letters
+      - Appraisal report
+      - Title commitment
+  - step: 4
+    action: Assess borrower creditworthiness
+    factors:
+      - Payment history (credit report)
+      - Debt-to-income ratio
+      - Loan-to-value ratio
+      - Reserves (months of PITI)
+      - Employment stability
+  - step: 5
+    action: Determine if compensating factors exist
+    compensating_factors:
+      - Significant reserves
+      - Minimal debt increase
+      - Excellent credit history
+      - Conservative LTV
+      - Stable employment (> 2 years)
+  - step: 6
+    action: Make final credit decision
+    possible_decisions:
+      - Clear to Close (CTC)
+      - Suspended (additional documentation needed)
+      - Conditional Approval (conditions must be met)
+      - Denied
+  - step: 7
+    action: Document decision rationale
+    required: "Detailed underwriting narrative"
+  - step: 8
+    action: Issue decision letter to processor/LO
+    trigger: "Customer notification workflow"
+
+# Post-conditions
+postconditions:
+  - Credit decision documented in LOS
+  - Decision letter generated
+  - Customer notified of decision
+  - If approved: Loan moves to closing
+  - If conditions: Processor works to clear conditions
+  - If denied: Adverse action notice sent (ECOA compliance)
+
+# Data Generated
+data_outputs:
+  - Credit decision (approved/suspended/denied)
+  - List of conditions (if conditional approval)
+  - Underwriting narrative/notes
+  - Decision timestamp
+  - Underwriter ID and signature
+
+# Regulatory & Compliance
+regulatory_refs:
+  - ECOA (Equal Credit Opportunity Act)
+  - TRID (TILA-RESPA Integrated Disclosure)
+  - ATR/QM (Ability to Repay / Qualified Mortgage)
+  - Fair Lending laws (FHA, HMDA)
+
+risk_category: critical
+compliance_notes: |
+  Underwriting decision must be based on documented, objective criteria.
+  Cannot discriminate based on protected classes (ECOA).
+  If denied, must provide specific adverse action reasons within 30 days.
+  Must comply with ATR rule - verify borrower's ability to repay.
+
+# Customer Experience
+customer_sentiment_impact: critical
+touchpoint_importance: critical
+emotional_impact: "Approval = joy, Denial = disappointment, Conditions = anxiety"
+
+# Dependencies
+depends_on:
+  - atom-sys-aus-submit
+  - All prior journey atoms
+triggers:
+  - Closing process (if approved)
+  - Condition clearing workflow (if conditional)
+  - Adverse action notice (if denied)
+
+# Metrics
+success_metrics:
+  - Average decision time < 48 hours from AUS
+  - Approval rate: 70-80% (industry benchmark)
+  - Conditional approval rate: 15-20%
+  - Denial rate: 5-10%
+  - Post-closing audit defect rate < 2%
+  - Investor buyback rate < 0.5%
+
+# Decision Criteria
+approval_criteria:
+  minimum_credit_score: 620
+  maximum_dti: 50%
+  maximum_ltv: 97%
+  minimum_reserves: "2 months PITI for conventional"
+  employment_stability: "2 years in same field"
+
+# Quality Checkpoints
+quality_gates:
+  - Peer review for loans > $1M
+  - Senior UW review for exceptions to guidelines
+  - Manager approval for manual underwriting decisions
+  - Secondary review for first-time homebuyers with minimal reserves
+
+# Common Conditions Issued
+common_conditions:
+  - "Provide 2 most recent pay stubs"
+  - "Provide updated bank statements (within 60 days)"
+  - "Explanation letter for credit inquiry"
+  - "Verification of Employment (VOE) dated within 10 days of closing"
+  - "Final inspection/appraisal update"
+  - "Clear title objections"
+
+# Denial Reasons (ECOA compliant)
+common_denial_reasons:
+  - "Credit history insufficient"
+  - "Debt-to-income ratio too high"
+  - "Insufficient funds for down payment and closing costs"
+  - "Unable to verify employment"
+  - "Property does not meet minimum standards"
+
+# Notes
+notes: |
+  This is THE most critical decision point in the entire mortgage process.
+  Underwriter expertise and judgment directly impact loan quality, investor
+  confidence, and regulatory compliance. Balancing risk with customer service
+  is the underwriter's core responsibility.

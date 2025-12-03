@@ -1,0 +1,123 @@
+---
+id: atom-bo-income-review
+type: atom
+title: Processor Reviews Income Documents
+version: 1.0.0
+
+# Classification
+atom_type: back-office-action
+actor: processor
+front_stage: false
+customer_visible: false
+
+# Timing
+sla_hours: 8
+criticality: high
+
+# Description
+description: |
+  Loan processor reviews uploaded W-2 forms and other income documents for
+  completeness, accuracy, and compliance with investor guidelines.
+
+# Pre-conditions
+preconditions:
+  - W-2 documents uploaded by customer
+  - Processor assigned to loan file
+  - Access to income verification guidelines
+  - LOS system available
+
+# Steps
+steps:
+  - step: 1
+    action: Processor opens document review task
+    system: "LOS Task Queue"
+  - step: 2
+    action: Verify document completeness
+    checklist:
+      - All pages present
+      - Document is legible
+      - Not expired (current or prior year)
+      - Employer name visible
+  - step: 3
+    action: Cross-reference with application data
+    validation:
+      - Employer name matches application
+      - Income amounts reasonable
+      - No unexplained discrepancies
+  - step: 4
+    action: Check for red flags
+    red_flags:
+      - Altered or forged documents
+      - Inconsistent formatting
+      - Suspicious employer names
+  - step: 5
+    action: Determine if additional documentation needed
+    may_request:
+      - Pay stubs for current year
+      - VOE (Verification of Employment)
+      - Tax returns if self-employment
+  - step: 6
+    action: Mark documents as accepted or request resubmission
+    outcomes:
+      - Accepted → Proceed to calculation
+      - Rejected → Request new documents
+      - Unclear → Escalate to underwriter
+
+# Post-conditions
+postconditions:
+  - Documents marked as reviewed in LOS
+  - Income calculation can proceed OR
+  - Customer notified of additional document needs
+
+# Data Generated
+data_outputs:
+  - Review timestamp
+  - Document acceptance status
+  - Notes on discrepancies or concerns
+  - Additional document requests (if any)
+
+# Regulatory & Compliance
+regulatory_refs:
+  - ECOA
+  - ATR/QM
+  - Fannie Mae Selling Guide B3-3.1
+  - Freddie Mac Guide 5301.1
+
+risk_category: high
+compliance_notes: |
+  Improper income verification is a leading cause of loan buybacks.
+  Must follow investor-specific guidelines exactly.
+
+# Customer Experience
+customer_sentiment_impact: neutral
+internal_sla_impact: high
+
+# Dependencies
+depends_on:
+  - atom-cust-income-w2-upload
+triggers:
+  - atom-bo-income-calculation (if approved)
+  - Re-request workflow (if rejected)
+
+# Metrics
+success_metrics:
+  - Average review time < 8 hours
+  - Document acceptance rate > 80%
+  - Escalation rate < 10%
+  - Audit error rate < 2%
+
+# Quality Checkpoints
+quality_gates:
+  - Peer review for loans > $500K
+  - Random QC audit sample 10% of files
+  - Secondary review if red flags identified
+
+# Automation Opportunities
+automation_notes: |
+  AI-powered document classification and data extraction can reduce
+  manual review time by 60%. OCR + ML can auto-flag potential issues.
+
+# Notes
+notes: |
+  This is a critical quality control point. Processor skill and attention
+  to detail directly impact loan quality and investor confidence.

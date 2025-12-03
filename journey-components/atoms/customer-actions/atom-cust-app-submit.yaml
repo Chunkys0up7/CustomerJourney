@@ -1,0 +1,89 @@
+---
+id: atom-cust-app-submit
+type: atom
+title: Customer Submits Loan Application
+version: 1.0.0
+
+# Classification
+atom_type: customer-action
+actor: customer
+front_stage: true
+customer_visible: true
+
+# Timing
+sla_hours: 0.5
+criticality: high
+
+# Description
+description: |
+  Customer completes and submits initial 1003 loan application through the online lending portal.
+  This is the entry point for the entire mortgage origination journey.
+
+# Pre-conditions
+preconditions:
+  - Customer has created an account on lending portal
+  - Customer has gathered basic financial information
+  - Portal is operational and accessible
+
+# Steps
+steps:
+  - step: 1
+    action: Customer logs into lending portal
+    system: "LOS Portal"
+  - step: 2
+    action: Customer completes loan application form (1003)
+    details: "Property info, income, assets, liabilities, declarations"
+  - step: 3
+    action: Customer reviews and e-signs disclosure documents
+    regulatory: "TRID Initial Disclosures"
+  - step: 4
+    action: Customer clicks Submit Application
+    trigger: "Application moved to processing queue"
+
+# Post-conditions
+postconditions:
+  - Application record created in LOS
+  - Customer receives application confirmation email
+  - Loan Officer assigned to application
+  - Initial disclosures delivered within 3 business days (TRID compliance)
+
+# Data Generated
+data_outputs:
+  - Application ID
+  - Borrower contact information
+  - Property address and loan amount
+  - Initial disclosure timestamp
+
+# Regulatory & Compliance
+regulatory_refs:
+  - TRID (TILA-RESPA Integrated Disclosure)
+  - ECOA (Equal Credit Opportunity Act)
+  - Fannie Mae Form 1003
+
+risk_category: medium
+compliance_notes: |
+  Must deliver Loan Estimate within 3 business days of application receipt.
+  TRID considers application "received" when 6 pieces of info are collected.
+
+# Customer Experience
+customer_sentiment_impact: positive
+customer_effort_score: medium
+touchpoint_importance: critical
+
+# Dependencies
+enables:
+  - atom-cust-income-w2-upload
+triggers:
+  - LO assignment workflow
+  - Initial disclosure generation
+
+# Metrics
+success_metrics:
+  - Application completion rate > 80%
+  - Average completion time < 30 minutes
+  - Form validation error rate < 5%
+
+# Notes
+notes: |
+  This is the critical first touchpoint. Portal UX directly impacts conversion rates.
+  Mobile responsiveness is essential as 40% of applications start on mobile devices.

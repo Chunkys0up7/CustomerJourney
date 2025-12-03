@@ -1,0 +1,134 @@
+---
+id: atom-bo-income-calculation
+type: atom
+title: Calculate Qualifying Income
+version: 1.0.0
+
+# Classification
+atom_type: back-office-action
+actor: processor
+front_stage: false
+customer_visible: false
+
+# Timing
+sla_hours: 4
+criticality: critical
+
+# Description
+description: |
+  Processor calculates borrower's qualifying monthly income using standardized
+  formulas per Fannie Mae / Freddie Mac guidelines. This is a critical input
+  for debt-to-income (DTI) ratio calculation.
+
+# Pre-conditions
+preconditions:
+  - Income documents reviewed and accepted
+  - Access to income calculation tools
+  - Knowledge of investor-specific calculation methods
+  - Application data available
+
+# Steps
+steps:
+  - step: 1
+    action: Gather verified income documentation
+    sources:
+      - W-2 forms (most recent 2 years)
+      - Pay stubs (most recent 30 days)
+      - Tax returns (if self-employed)
+  - step: 2
+    action: Identify income types present
+    income_types:
+      - Base salary/wages
+      - Overtime/bonus/commission
+      - Self-employment income
+      - Rental income
+      - Other income (alimony, disability, etc)
+  - step: 3
+    action: Apply calculation methodology per income type
+    methods:
+      salary: "Monthly gross from most recent pay stub or W-2"
+      overtime: "2-year average if consistent, exclude if declining"
+      bonus: "2-year average if consistent"
+      self_employment: "2-year average from tax returns (Schedule C or 1065)"
+  - step: 4
+    action: Calculate total qualifying monthly income
+    formula: "Sum of all qualifying income types"
+  - step: 5
+    action: Document calculation methodology
+    required: "Detailed income calculation worksheet"
+  - step: 6
+    action: Enter qualifying income into AUS
+    system: "LOS → AUS interface"
+
+# Post-conditions
+postconditions:
+  - Qualifying monthly income determined
+  - Income calculation worksheet saved to file
+  - AUS ready for submission
+  - DTI ratio can be calculated
+
+# Data Generated
+data_outputs:
+  - Qualifying monthly income (total)
+  - Income by type breakdown
+  - Calculation worksheet
+  - Methodology notes
+
+# Regulatory & Compliance
+regulatory_refs:
+  - ATR/QM (Ability to Repay)
+  - Fannie Mae Selling Guide B3-3
+  - Freddie Mac Guide 5300 series
+  - CFPB ATR Rule
+
+risk_category: critical
+compliance_notes: |
+  Incorrect income calculation is a top defect in loan quality audits.
+  Over-stating income violates ATR requirements and can result in loan buyback.
+  Under-calculating income may cause loan to be declined unnecessarily.
+
+# Customer Experience
+customer_sentiment_impact: high
+impact_on_approval: critical
+
+# Dependencies
+depends_on:
+  - atom-bo-income-review
+triggers:
+  - atom-sys-aus-submit
+
+# Metrics
+success_metrics:
+  - Calculation accuracy rate > 99%
+  - Average calculation time < 4 hours
+  - Post-closing audit defect rate < 1%
+  - Investor guideline compliance 100%
+
+# Quality Checkpoints
+quality_gates:
+  - Peer review required for self-employment income
+  - Secondary review for non-traditional income sources
+  - Manager approval for income > $200K monthly
+
+# Common Errors to Avoid
+common_errors:
+  - Using gross vs net income incorrectly
+  - Failing to average variable income over 2 years
+  - Including non-continuous income sources
+  - Not adjusting for business expenses (self-employed)
+  - Incorrect treatment of overtime/bonus
+
+# Calculation Examples
+examples:
+  - scenario: "W-2 employee with base salary only"
+    method: "Use gross monthly from most recent pay stub"
+  - scenario: "W-2 employee with overtime"
+    method: "2-year average if consistent (< 20% decline YOY)"
+  - scenario: "Self-employed borrower"
+    method: "2-year average AGI + depreciation/depletion - business losses"
+
+# Notes
+notes: |
+  This calculation directly determines loan approval. Processors must have
+  expert knowledge of investor guidelines and calculation methodologies.
+  Automated calculation tools help but must be validated manually.

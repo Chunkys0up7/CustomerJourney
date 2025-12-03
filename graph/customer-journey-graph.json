@@ -1,0 +1,186 @@
+{
+  "metadata": {
+    "schema_version": "1.0.0",
+    "created": "2025-12-03",
+    "description": "Customer Journey graph for mortgage origination using NASA-STD-2100-91 atomic/modular principles",
+    "stats": {
+      "atomCount": 6,
+      "moduleCount": 1,
+      "phaseCount": 1,
+      "journeyCount": 1,
+      "edgeCount": 12
+    }
+  },
+  "nodes": {
+    "atom-cust-app-submit": {
+      "id": "atom-cust-app-submit",
+      "type": "atom",
+      "title": "Customer Submits Loan Application",
+      "actor": "customer",
+      "atom_type": "customer-action",
+      "customer_visible": true,
+      "front_stage": true,
+      "sla_hours": 0.5,
+      "regulatory_refs": ["TRID"],
+      "description": "Customer completes and submits initial loan application through online portal"
+    },
+    "atom-cust-income-w2-upload": {
+      "id": "atom-cust-income-w2-upload",
+      "type": "atom",
+      "title": "Customer Uploads W-2 Forms",
+      "actor": "customer",
+      "atom_type": "customer-action",
+      "customer_visible": true,
+      "front_stage": true,
+      "sla_hours": 24,
+      "regulatory_refs": ["ECOA", "TRID"],
+      "description": "Customer uploads W-2 tax forms for income verification"
+    },
+    "atom-bo-income-review": {
+      "id": "atom-bo-income-review",
+      "type": "atom",
+      "title": "Processor Reviews Income Documents",
+      "actor": "processor",
+      "atom_type": "back-office-action",
+      "customer_visible": false,
+      "front_stage": false,
+      "sla_hours": 8,
+      "regulatory_refs": ["ECOA", "ATR/QM"],
+      "description": "Loan processor reviews uploaded income documents for completeness and accuracy"
+    },
+    "atom-bo-income-calculation": {
+      "id": "atom-bo-income-calculation",
+      "type": "atom",
+      "title": "Calculate Qualifying Income",
+      "actor": "processor",
+      "atom_type": "back-office-action",
+      "customer_visible": false,
+      "front_stage": false,
+      "sla_hours": 4,
+      "regulatory_refs": ["ATR/QM", "Fannie Mae 1003"],
+      "description": "Calculate borrower's qualifying income using standardized formulas"
+    },
+    "atom-sys-aus-submit": {
+      "id": "atom-sys-aus-submit",
+      "type": "atom",
+      "title": "Submit to Automated Underwriting",
+      "actor": "system",
+      "atom_type": "system-action",
+      "customer_visible": false,
+      "front_stage": false,
+      "sla_hours": 0.25,
+      "regulatory_refs": ["ECOA"],
+      "description": "System submits loan data to AUS (Desktop Underwriter or Loan Prospector)"
+    },
+    "atom-bo-uw-decision": {
+      "id": "atom-bo-uw-decision",
+      "type": "atom",
+      "title": "Underwriter Issues Decision",
+      "actor": "underwriter",
+      "atom_type": "back-office-action",
+      "customer_visible": true,
+      "front_stage": true,
+      "sla_hours": 48,
+      "regulatory_refs": ["ECOA", "TRID", "ATR/QM"],
+      "description": "Underwriter reviews AUS results and issues approval, denial, or conditional approval"
+    },
+    "module-income-verification": {
+      "id": "module-income-verification",
+      "type": "module",
+      "title": "Income Verification Workflow",
+      "description": "Complete workflow for verifying borrower income",
+      "sla_hours": 84.25,
+      "atoms": [
+        "atom-cust-income-w2-upload",
+        "atom-bo-income-review",
+        "atom-bo-income-calculation",
+        "atom-sys-aus-submit",
+        "atom-bo-uw-decision"
+      ]
+    },
+    "phase-processing": {
+      "id": "phase-processing",
+      "type": "phase",
+      "title": "Processing Phase",
+      "description": "Loan processing and initial underwriting",
+      "sla_hours": 168,
+      "modules": [
+        "module-income-verification"
+      ]
+    },
+    "journey-purchase-conventional": {
+      "id": "journey-purchase-conventional",
+      "type": "journey",
+      "title": "Conventional Purchase Loan Journey",
+      "description": "Complete customer journey for conventional purchase mortgage",
+      "loan_type": "conventional",
+      "transaction_type": "purchase",
+      "sla_days": 30,
+      "phases": [
+        "phase-processing"
+      ]
+    }
+  },
+  "edges": [
+    {
+      "source": "atom-cust-app-submit",
+      "target": "atom-cust-income-w2-upload",
+      "type": "enables"
+    },
+    {
+      "source": "atom-cust-income-w2-upload",
+      "target": "atom-bo-income-review",
+      "type": "triggers"
+    },
+    {
+      "source": "atom-bo-income-review",
+      "target": "atom-bo-income-calculation",
+      "type": "sequential"
+    },
+    {
+      "source": "atom-bo-income-calculation",
+      "target": "atom-sys-aus-submit",
+      "type": "data-flows-to"
+    },
+    {
+      "source": "atom-sys-aus-submit",
+      "target": "atom-bo-uw-decision",
+      "type": "triggers"
+    },
+    {
+      "source": "module-income-verification",
+      "target": "atom-cust-income-w2-upload",
+      "type": "contains"
+    },
+    {
+      "source": "module-income-verification",
+      "target": "atom-bo-income-review",
+      "type": "contains"
+    },
+    {
+      "source": "module-income-verification",
+      "target": "atom-bo-income-calculation",
+      "type": "contains"
+    },
+    {
+      "source": "module-income-verification",
+      "target": "atom-sys-aus-submit",
+      "type": "contains"
+    },
+    {
+      "source": "module-income-verification",
+      "target": "atom-bo-uw-decision",
+      "type": "contains"
+    },
+    {
+      "source": "phase-processing",
+      "target": "module-income-verification",
+      "type": "contains"
+    },
+    {
+      "source": "journey-purchase-conventional",
+      "target": "phase-processing",
+      "type": "contains"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "customer-journey-as-code",
+  "version": "1.0.0",
+  "description": "Customer Journey documentation using NASA-STD-2100-91 atomic/modular principles",
+  "scripts": {
+    "build": "node tools/build-journey.js",
+    "validate": "node tools/validate-graph.js",
+    "impact": "node tools/impact-analysis.js",
+    "generate": "node tools/generate-atom.js",
+    "serve": "node ../server/server.js",
+    "start": "npm run serve"
+  },
+  "keywords": [
+    "customer-journey",
+    "docs-as-code",
+    "atomic-documentation",
+    "nasa-std-2100-91",
+    "mortgage-origination"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "d3": "^7.8.5"
+  }
+}

@@ -1,0 +1,106 @@
+---
+id: atom-cust-income-w2-upload
+type: atom
+title: Customer Uploads W-2 Forms
+version: 1.0.0
+
+# Classification
+atom_type: customer-action
+actor: customer
+front_stage: true
+customer_visible: true
+
+# Timing
+sla_hours: 24
+criticality: high
+
+# Description
+description: |
+  Customer uploads W-2 tax forms through the document portal for income verification.
+  Supports multiple W-2s for borrowers with multiple employers or co-borrowers.
+
+# Pre-conditions
+preconditions:
+  - Application submitted
+  - Customer has received document request notification
+  - Customer has access to most recent 2 years of W-2 forms
+  - Document portal is accessible
+
+# Steps
+steps:
+  - step: 1
+    action: Customer receives document request email
+    notification_type: "Email + SMS"
+  - step: 2
+    action: Customer logs into document portal
+    system: "Document Management System"
+  - step: 3
+    action: Customer selects "W-2 Forms" document type
+    ui_element: "Document type dropdown"
+  - step: 4
+    action: Customer uploads W-2 files (PDF, JPG, or PNG)
+    file_requirements: "Max 10MB per file, 2 years required"
+  - step: 5
+    action: System validates file format and readability
+    validation: "OCR text extraction test"
+  - step: 6
+    action: Customer confirms upload completion
+    trigger: "Processor notified of new documents"
+
+# Post-conditions
+postconditions:
+  - W-2 documents stored in DMS with proper tagging
+  - Processor receives task notification
+  - Customer receives upload confirmation
+  - Document checklist updated
+
+# Data Generated
+data_outputs:
+  - Document IDs in DMS
+  - Upload timestamp
+  - File metadata (size, type, pages)
+  - OCR extracted text for income amounts
+
+# Regulatory & Compliance
+regulatory_refs:
+  - ECOA (Equal Credit Opportunity Act)
+  - TRID
+  - ATR/QM (Ability to Repay / Qualified Mortgage)
+
+risk_category: medium
+compliance_notes: |
+  Income documentation is critical for ATR/QM compliance.
+  Must verify income using standardized calculation methods.
+
+# Customer Experience
+customer_sentiment_impact: neutral
+customer_effort_score: medium
+touchpoint_importance: high
+pain_points:
+  - Finding physical W-2 documents
+  - Scanning or photographing documents
+  - Mobile upload challenges
+
+# Dependencies
+depends_on:
+  - atom-cust-app-submit
+triggers:
+  - atom-bo-income-review
+
+# Metrics
+success_metrics:
+  - Document upload completion rate > 85%
+  - Average time to upload < 10 minutes
+  - OCR success rate > 95%
+  - Re-upload request rate < 10%
+
+# Optimization Opportunities
+optimization_notes: |
+  Consider IRS Form 4506-C integration for automated W-2 retrieval.
+  Mobile app would improve upload experience.
+  AI-powered document classification can reduce tagging errors.
+
+# Notes
+notes: |
+  This is often a friction point in the journey. Clear instructions and
+  mobile-friendly upload interface are critical for minimizing abandonment.

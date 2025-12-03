@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Journey Graph Viewer</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+
+        #graph {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .node {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .node:hover {
+            filter: brightness(1.1);
+        }
+
+        .node circle {
+            stroke-width: 3px;
+        }
+
+        .node text {
+            font-size: 11px;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .link {
+            fill: none;
+            stroke: #999;
+            stroke-opacity: 0.6;
+            stroke-width: 2px;
+            marker-end: url(#arrowhead);
+        }
+
+        .link:hover {
+            stroke: #333;
+            stroke-opacity: 1;
+            stroke-width: 3px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            max-width: 300px;
+            display: none;
+        }
+
+        .tooltip h4 {
+            margin: 0 0 8px 0;
+            color: #4ade80;
+        }
+
+        .tooltip p {
+            margin: 4px 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ Customer Journey Graph Viewer</h1>
+        <p class="subtitle">Interactive visualization of mortgage origination journey using NASA-STD-2100-91 principles</p>
+
+        <div class="card">
+            <div class="stats" id="stats"></div>
+
+            <div class="controls">
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: #4ade80;"></div>
+                        <span>Customer</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: #3b82f6;"></div>
+                        <span>Processor</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: #a855f7;"></div>
+                        <span>Underwriter</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="background: #f59e0b;"></div>
+                        <span>System</span>
+                    </div>
+                </div>
+
+                <div class="zoom-controls">
+                    <button onclick="zoomIn()">Zoom In</button>
+                    <button onclick="zoomOut()">Zoom Out</button>
+                    <button onclick="resetZoom()">Reset</button>
+                </div>
+            </div>
+
+            <svg id="graph"></svg>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Configuration
+        const width = 1340;
+        const height = 800;
+
+        // Color mapping for actors
+        const actorColors = {
+            customer: '#4ade80',
+            processor: '#3b82f6',
+            underwriter: '#a855f7',
+            system: '#f59e0b',
+            loan_officer: '#06b6d4',
+            closer: '#ef4444'
+        };
+
+        // SVG setup
+        const svg = d3.select('#graph')
+            .attr('width', width)
+            .attr('height', height);
+
+        const g = svg.append('g');
+
+        // Add zoom behavior
+        const zoom = d3.zoom()
+            .scaleExtent([0.1, 4])
+            .on('zoom', (event) => {
+                g.attr('transform', event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Arrow marker
+        svg.append('defs').append('marker')
+            .attr('id', 'arrowhead')
+            .attr('viewBox', '-0 -5 10 10')
+            .attr('refX', 25)
+            .attr('refY', 0)
+            .attr('orient', 'auto')
+            .attr('markerWidth', 8)
+            .attr('markerHeight', 8)
+            .append('svg:path')
+            .attr('d', 'M 0,-5 L 10,0 L 0,5')
+            .attr('fill', '#999');
+
+        // Tooltip
+        const tooltip = d3.select('#tooltip');
+
+        // Zoom functions
+        function zoomIn() {
+            svg.transition().duration(300).call(zoom.scaleBy, 1.3);
+        }
+
+        function zoomOut() {
+            svg.transition().duration(300).call(zoom.scaleBy, 0.7);
+        }
+
+        function resetZoom() {
+            svg.transition().duration(500).call(
+                zoom.transform,
+                d3.zoomIdentity
+            );
+        }
+
+        // Load and visualize graph
+        fetch('../graph/customer-journey-graph.json')
+            .then(response => response.json())
+            .then(graphData => {
+                visualizeGraph(graphData);
+                displayStats(graphData);
+            })
+            .catch(error => {
+                console.error('Error loading graph:', error);
+                alert('Failed to load journey graph. Check console for details.');
+            });
+
+        function displayStats(graphData) {
+            const statsHtml = `
+                <div class="stat-card">
+                    <div class="stat-value">${graphData.metadata.stats.atomCount}</div>
+                    <div class="stat-label">Touchpoints</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${graphData.metadata.stats.moduleCount}</div>
+                    <div class="stat-label">Modules</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${graphData.metadata.stats.phaseCount}</div>
+                    <div class="stat-label">Phases</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${graphData.metadata.stats.journeyCount}</div>
+                    <div class="stat-label">Journeys</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${graphData.metadata.stats.edgeCount}</div>
+                    <div class="stat-label">Dependencies</div>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = statsHtml;
+        }
+
+        function visualizeGraph(graphData) {
+            // Convert nodes object to array
+            const nodes = Object.values(graphData.nodes).map(node => ({
+                ...node,
+                id: node.id
+            }));
+
+            const links = graphData.edges.map(edge => ({
+                source: edge.source,
+                target: edge.target,
+                type: edge.type
+            }));
+
+            // Create force simulation
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(150))
+                .force('charge', d3.forceManyBody().strength(-400))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(50));
+
+            // Create links
+            const link = g.append('g')
+                .selectAll('line')
+                .data(links)
+                .join('line')
+                .attr('class', 'link')
+                .attr('stroke-dasharray', d => d.type === 'contains' ? '5,5' : '0');
+
+            // Create nodes
+            const node = g.append('g')
+                .selectAll('g')
+                .data(nodes)
+                .join('g')
+                .attr('class', 'node')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            // Add circles to nodes
+            node.append('circle')
+                .attr('r', d => {
+                    if (d.type === 'journey') return 30;
+                    if (d.type === 'phase') return 25;
+                    if (d.type === 'module') return 20;
+                    return 15;
+                })
+                .attr('fill', d => {
+                    if (d.type === 'atom') return actorColors[d.actor] || '#94a3b8';
+                    if (d.type === 'module') return '#e2e8f0';
+                    if (d.type === 'phase') return '#cbd5e1';
+                    if (d.type === 'journey') return '#94a3b8';
+                    return '#e5e7eb';
+                })
+                .attr('stroke', '#333');
+
+            // Add labels to nodes
+            node.append('text')
+                .attr('dy', d => {
+                    if (d.type === 'journey') return 40;
+                    if (d.type === 'phase') return 35;
+                    if (d.type === 'module') return 30;
+                    return 25;
+                })
+                .attr('text-anchor', 'middle')
+                .text(d => {
+                    const maxLength = 20;
+                    return d.title.length > maxLength
+                        ? d.title.substring(0, maxLength) + '...'
+                        : d.title;
+                });
+
+            // Add tooltips
+            node.on('mouseover', (event, d) => {
+                let tooltipHtml = `<h4>${d.title}</h4>`;
+                tooltipHtml += `<p><strong>Type:</strong> ${d.type}</p>`;
+                if (d.actor) tooltipHtml += `<p><strong>Actor:</strong> ${d.actor}</p>`;
+                if (d.atom_type) tooltipHtml += `<p><strong>Atom Type:</strong> ${d.atom_type}</p>`;
+                if (d.sla_hours !== undefined) tooltipHtml += `<p><strong>SLA:</strong> ${d.sla_hours} hours</p>`;
+                if (d.customer_visible !== undefined) {
+                    tooltipHtml += `<p><strong>Customer Visible:</strong> ${d.customer_visible ? 'Yes' : 'No'}</p>`;
+                }
+                if (d.regulatory_refs && d.regulatory_refs.length > 0) {
+                    tooltipHtml += `<p><strong>Regulatory:</strong> ${d.regulatory_refs.join(', ')}</p>`;
+                }
+
+                tooltip.html(tooltipHtml)
+                    .style('display', 'block')
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY + 10) + 'px');
+            })
+            .on('mouseout', () => {
+                tooltip.style('display', 'none');
+            });
+
+            // Update positions on each tick
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+            // Drag functions
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+        }
+    </script>
+</body>
+</html>

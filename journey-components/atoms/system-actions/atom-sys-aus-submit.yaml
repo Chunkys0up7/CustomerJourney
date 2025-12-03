@@ -1,0 +1,154 @@
+---
+id: atom-sys-aus-submit
+type: atom
+title: Submit to Automated Underwriting
+version: 1.0.0
+
+# Classification
+atom_type: system-action
+actor: system
+front_stage: false
+customer_visible: false
+
+# Timing
+sla_hours: 0.25
+criticality: high
+
+# Description
+description: |
+  Loan Origination System automatically submits loan data to the appropriate
+  Automated Underwriting System (Desktop Underwriter for Fannie Mae or
+  Loan Prospector for Freddie Mac) for risk assessment and recommendations.
+
+# Pre-conditions
+preconditions:
+  - Loan application data complete in LOS
+  - Qualifying income calculated
+  - Credit report pulled
+  - Property information entered
+  - AUS interface configured and operational
+
+# Steps
+steps:
+  - step: 1
+    action: System validates data completeness
+    validation_checks:
+      - All required fields populated
+      - Data passes format validation
+      - No blocking errors in LOS
+  - step: 2
+    action: System determines appropriate AUS
+    logic: |
+      IF investor = Fannie Mae THEN DU (Desktop Underwriter)
+      IF investor = Freddie Mac THEN LPA (Loan Prospector)
+      IF investor = FHA THEN FHA TOTAL Scorecard
+  - step: 3
+    action: System formats data per AUS specifications
+    mapping: "LOS fields → AUS XML/JSON schema"
+  - step: 4
+    action: System transmits data via secure API
+    protocol: "HTTPS with TLS 1.2+"
+  - step: 5
+    action: AUS processes loan data (risk model execution)
+    duration: "Typically 5-30 seconds"
+  - step: 6
+    action: System receives AUS response
+    response_types:
+      - Approve/Eligible
+      - Refer with Caution
+      - Refer (manual underwriting required)
+      - Ineligible
+  - step: 7
+    action: System stores AUS findings in loan file
+    stored_data:
+      - Recommendation (approve/refer/ineligible)
+      - Risk score
+      - Required conditions
+      - Timestamp and case number
+
+# Post-conditions
+postconditions:
+  - AUS findings available in LOS
+  - Underwriter notified if manual review needed
+  - Customer notification triggered (if appropriate)
+  - Loan moves to next stage based on findings
+
+# Data Generated
+data_outputs:
+  - AUS recommendation
+  - Risk classification
+  - Required conditions list
+  - AUS case number
+  - Finding timestamp
+
+# Regulatory & Compliance
+regulatory_refs:
+  - ECOA (Equal Credit Opportunity Act)
+  - FCRA (Fair Credit Reporting Act)
+  - Fannie Mae / Freddie Mac AUS guidelines
+
+risk_category: medium
+compliance_notes: |
+  AUS recommendations must be documented in the loan file.
+  Cannot cherry-pick AUS results (must use first valid finding).
+  ECOA requires adverse action notice if loan denied based on AUS.
+
+# Customer Experience
+customer_sentiment_impact: high
+impact_on_timeline: critical
+
+# Dependencies
+depends_on:
+  - atom-bo-income-calculation
+  - Credit report pull
+  - Property appraisal (for final approval)
+triggers:
+  - atom-bo-uw-decision
+
+# Metrics
+success_metrics:
+  - AUS submission success rate > 99%
+  - Average response time < 30 seconds
+  - Data validation error rate < 2%
+  - System uptime > 99.9%
+
+# Error Handling
+error_scenarios:
+  - scenario: "Missing required fields"
+    resolution: "System displays error message, processor corrects data"
+  - scenario: "AUS system timeout"
+    resolution: "Automatic retry after 30 seconds (max 3 attempts)"
+  - scenario: "Invalid credit data"
+    resolution: "Re-pull credit report, resubmit"
+  - scenario: "AUS API unavailable"
+    resolution: "Queue submission for later, notify IT team"
+
+# AUS Recommendations Explained
+aus_findings:
+  - finding: "Approve/Eligible"
+    meaning: "Loan meets investor guidelines, standard conditions apply"
+    next_step: "Underwriter validates AUS inputs and issues approval"
+  - finding: "Refer with Caution"
+    meaning: "Loan has risk factors but may be approved with compensating factors"
+    next_step: "Manual underwriting review required"
+  - finding: "Refer"
+    meaning: "AUS cannot make recommendation, full manual underwriting needed"
+    next_step: "Comprehensive manual underwriting analysis"
+  - finding: "Ineligible"
+    meaning: "Loan does not meet minimum investor requirements"
+    next_step: "Denial or restructure loan terms"
+
+# Integration Points
+system_integrations:
+  - system: "Desktop Underwriter (DU)"
+    api: "DU Web Services API"
+  - system: "Loan Prospector (LPA)"
+    api: "LPA API"
+  - system: "FHA TOTAL Scorecard"
+    api: "FHA TOTAL API"
+
+# Notes
+notes: |
+  AUS is the centerpiece of modern mortgage underwriting. Most conventional
+  loans receive automated approvals, dramatically reducing underwriting time.
+  However, AUS is only as good as the data entered - garbage in, garbage out.
