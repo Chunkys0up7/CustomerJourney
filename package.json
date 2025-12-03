@@ -7,8 +7,8 @@
     "validate": "node tools/validate-graph.js",
     "impact": "node tools/impact-analysis.js",
     "generate": "node tools/generate-atom.js",
-    "serve": "node ../server/server.js",
-    "start": "npm run serve"
+    "serve": "node server.js",
+    "start": "node server.js"
   },
   "keywords": [
     "customer-journey",
