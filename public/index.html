@@ -225,6 +225,28 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
 
+        .atom-card[draggable="true"] {
+            cursor: move;
+        }
+
+        .atom-card[draggable="true"]:hover {
+            border-color: #f59e0b;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .atom-violation {
+            animation: pulse-warning 2s infinite;
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(220, 38, 38, 0);
+            }
+        }
+
         .atom-id {
             font-size: 11px;
             color: #718096;
@@ -759,6 +781,8 @@
         let currentFilter = 'all';
         let currentPhase = 'all';
         let selectedAtom = null;
+        let modifiedSequence = null; // Track reordered atoms
+        let whatIfMode = false; // Toggle for what-if analysis mode
 
         // Load and initialize
         async function init() {
@@ -1127,19 +1151,53 @@
 
         // Render Swimlane View
         function renderSwimlaneView(atoms) {
-            const frontStage = atoms.filter(a => a.stage === 'front_stage');
-            const backStage = atoms.filter(a => a.stage === 'back_stage');
-            const system = atoms.filter(a => a.stage === 'system');
+            const workingAtoms = modifiedSequence || atoms;
+            const frontStage = workingAtoms.filter(a => a.stage === 'front_stage');
+            const backStage = workingAtoms.filter(a => a.stage === 'back_stage');
+            const system = workingAtoms.filter(a => a.stage === 'system');
+
+            // Detect dependency violations
+            const violations = detectDependencyViolations(workingAtoms);
+            const hasViolations = violations.length > 0;
 
             document.getElementById('view-content').innerHTML = `
                 <div class="swimlane-container">
+                    <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center; background: ${whatIfMode ? '#fef3c7' : 'white'}; padding: 15px; border-radius: 8px; border: 2px solid ${whatIfMode ? '#f59e0b' : '#e2e8f0'};">
+                        <button onclick="toggleWhatIfMode()" style="padding: 10px 20px; background: ${whatIfMode ? '#f59e0b' : '#667eea'}; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                            ${whatIfMode ? '🔬 What-If Mode: ON' : '💡 Enable What-If Mode'}
+                        </button>
+                        ${whatIfMode ? `
+                            <span style="flex: 1; color: #92400e;">
+                                <strong>What-If Mode Active:</strong> Drag atoms to reorder and see impact
+                            </span>
+                            <button onclick="resetSequence()" style="padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                Reset Order
+                            </button>
+                            <button onclick="analyzeCurrentSequence()" style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                Analyze Impact
+                            </button>
+                        ` : '<span style="color: #64748b;">Enable to drag and reorder atoms</span>'}
+                    </div>
+
+                    ${hasViolations && whatIfMode ? `
+                        <div style="background: #fee2e2; border: 2px solid #dc2626; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <div style="font-weight: 600; color: #991b1b; margin-bottom: 10px;">
+                                ⚠️ ${violations.length} Dependency Violation${violations.length > 1 ? 's' : ''} Detected
+                            </div>
+                            <ul style="margin: 0; padding-left: 20px; color: #991b1b;">
+                                ${violations.slice(0, 5).map(v => `<li style="margin: 5px 0;">${v}</li>`).join('')}
+                                ${violations.length > 5 ? `<li style="margin: 5px 0;"><em>...and ${violations.length - 5} more</em></li>` : ''}
+                            </ul>
+                        </div>
+                    ` : ''}
+
                     <div class="swimlane">
                         <div class="swimlane-header">
                             <div class="swimlane-title">👤 Front-Stage (Customer-Facing)</div>
                             <div class="swimlane-badge">${frontStage.length} atoms</div>
                         </div>
-                        <div class="atom-grid">
-                            ${frontStage.map(atom => renderAtomCard(atom)).join('')}
+                        <div class="atom-grid" data-stage="front_stage">
+                            ${frontStage.map((atom, index) => renderAtomCard(atom, index, violations)).join('')}
                         </div>
                     </div>
 
@@ -1148,8 +1206,8 @@
                             <div class="swimlane-title">🏢 Back-Stage (Operations)</div>
                             <div class="swimlane-badge">${backStage.length} atoms</div>
                         </div>
-                        <div class="atom-grid">
-                            ${backStage.map(atom => renderAtomCard(atom)).join('')}
+                        <div class="atom-grid" data-stage="back_stage">
+                            ${backStage.map((atom, index) => renderAtomCard(atom, index, violations)).join('')}
                         </div>
                     </div>
 
@@ -1158,18 +1216,32 @@
                             <div class="swimlane-title">⚙️ System (Integration)</div>
                             <div class="swimlane-badge">${system.length} atoms</div>
                         </div>
-                        <div class="atom-grid">
-                            ${system.map(atom => renderAtomCard(atom)).join('')}
+                        <div class="atom-grid" data-stage="system">
+                            ${system.map((atom, index) => renderAtomCard(atom, index, violations)).join('')}
                         </div>
                     </div>
                 </div>
             `;
+
+            // Enable drag and drop if in what-if mode
+            if (whatIfMode) {
+                enableDragAndDrop();
+            }
         }
 
         // Render atom card
-        function renderAtomCard(atom) {
+        function renderAtomCard(atom, index, violations = []) {
+            const hasViolation = violations.some(v => v.includes(atom.id));
+            const dragAttributes = whatIfMode ? `draggable="true" ondragstart="handleDragStart(event, '${atom.id}')" ondragover="handleDragOver(event)" ondrop="handleDrop(event, '${atom.id}')" ondragend="handleDragEnd(event)"` : '';
+
             return `
-                <div class="atom-card" onclick="showAtomDetails('${atom.id}')">
+                <div class="atom-card ${hasViolation ? 'atom-violation' : ''}"
+                     data-atom-id="${atom.id}"
+                     ${dragAttributes}
+                     onclick="showAtomDetails('${atom.id}')"
+                     style="cursor: ${whatIfMode ? 'move' : 'pointer'}; ${hasViolation ? 'border-color: #dc2626; background: #fef2f2;' : ''}">
+                    ${hasViolation ? '<div style="position: absolute; top: 5px; right: 5px; color: #dc2626; font-size: 18px;">⚠️</div>' : ''}
+                    ${whatIfMode ? '<div style="position: absolute; top: 5px; left: 5px; color: #94a3b8; font-size: 16px;">☰</div>' : ''}
                     <div class="atom-id">${atom.id}</div>
                     <div class="atom-name">${atom.name}</div>
                     <div class="atom-meta">
@@ -1227,12 +1299,18 @@
 
         // Render Impact View
         function renderImpactView(atoms) {
+            // If in what-if mode with modifications, show sequence impact analysis
+            if (whatIfMode && modifiedSequence) {
+                renderWhatIfImpactAnalysis(modifiedSequence);
+                return;
+            }
+
             if (atoms.length === 0) {
                 document.getElementById('view-content').innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">🔍</div>
                         <h3>No Atoms Selected</h3>
-                        <p>Click an atom to see its impact analysis</p>
+                        <p>Click an atom to see its impact analysis, or enable What-If Mode in Swimlane view to analyze reordering impacts</p>
                     </div>
                 `;
                 return;
@@ -1328,6 +1406,243 @@
                     </div>
                 </div>
             `;
+        }
+
+        // What-If Impact Analysis
+        function renderWhatIfImpactAnalysis(atoms) {
+            const violations = detectDependencyViolations(atoms);
+            const riskLevel = violations.length === 0 ? 'LOW' : violations.length < 5 ? 'MEDIUM' : 'HIGH';
+            const riskClass = riskLevel === 'LOW' ? 'risk-low' : riskLevel === 'MEDIUM' ? 'risk-medium' : 'risk-high';
+
+            // Calculate affected atoms
+            const violationAtomIds = new Set();
+            violations.forEach(v => {
+                const match = v.match(/\(([^)]+)\)/g);
+                if (match) {
+                    match.forEach(m => {
+                        const id = m.replace(/[()]/g, '');
+                        violationAtomIds.add(id);
+                    });
+                }
+            });
+
+            const affectedAtoms = atoms.filter(a => violationAtomIds.has(a.id));
+            const customerFacingAffected = affectedAtoms.filter(a => a.stage === 'front_stage');
+            const regulatoryAffected = affectedAtoms.filter(a => a.regulatory_requirements.length > 0);
+
+            document.getElementById('view-content').innerHTML = `
+                <div class="impact-panel" style="border-color: ${riskLevel === 'LOW' ? '#38a169' : riskLevel === 'MEDIUM' ? '#f39c12' : '#e53e3e'}; background: ${riskLevel === 'LOW' ? '#f0fff4' : riskLevel === 'MEDIUM' ? '#fef5e7' : '#fff5f5'};">
+                    <div class="impact-header">
+                        <div class="impact-icon">${riskLevel === 'LOW' ? '🟢' : riskLevel === 'MEDIUM' ? '🟡' : '🔴'}</div>
+                        <div style="flex: 1;">
+                            <div class="impact-title">What-If Analysis: Sequence Reordering Impact</div>
+                            <div style="font-size: 13px; color: #718096; margin-top: 5px;">
+                                Change Type: REORDER • Analysis Date: ${new Date().toLocaleDateString()}
+                            </div>
+                        </div>
+                        <div class="${riskClass} risk-badge">Risk: ${riskLevel}</div>
+                    </div>
+
+                    <div class="impact-section">
+                        <h4>📊 Impact Summary</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: bold; color: ${violations.length === 0 ? '#38a169' : '#e53e3e'};">${violations.length}</div>
+                                <div style="font-size: 12px; color: #718096;">Violations</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: bold; color: #667eea;">${affectedAtoms.length}</div>
+                                <div style="font-size: 12px; color: #718096;">Affected Atoms</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 28px; font-weight: bold; color: #f59e0b;">${customerFacingAffected.length}</div>
+                                <div style="font-size: 12px; color: #718096;">Customer Impact</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    ${violations.length > 0 ? `
+                    <div class="impact-section">
+                        <h4>⚠️ Dependency Violations</h4>
+                        <ul class="impact-list">
+                            ${violations.map(v => `<li style="border-left-color: #e53e3e;">${v}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ` : `
+                    <div class="impact-section">
+                        <h4>✅ No Violations Detected</h4>
+                        <p style="color: #38a169; margin: 0;">The reordered sequence maintains all dependency relationships correctly.</p>
+                    </div>
+                    `}
+
+                    ${affectedAtoms.length > 0 ? `
+                    <div class="impact-section">
+                        <h4>🔗 Affected Atoms</h4>
+                        <ul class="impact-list">
+                            ${affectedAtoms.slice(0, 10).map(a =>
+                                `<li>${a.name} (${a.id}) - ${a.stage}</li>`
+                            ).join('')}
+                            ${affectedAtoms.length > 10 ? `<li style="font-style: italic;">...and ${affectedAtoms.length - 10} more atoms</li>` : ''}
+                        </ul>
+                    </div>
+                    ` : ''}
+
+                    ${regulatoryAffected.length > 0 ? `
+                    <div class="impact-section">
+                        <h4>⚖️ Regulatory Impact</h4>
+                        <ul class="impact-list">
+                            ${regulatoryAffected.map(a =>
+                                `<li style="border-left-color: #f59e0b;">${a.name}: ${a.regulatory_requirements.map(r => r.regulation).join(', ')}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                    ` : ''}
+
+                    <div class="impact-section">
+                        <h4>💡 Recommendations</h4>
+                        <ul class="impact-list">
+                            ${riskLevel === 'HIGH' ? `
+                                <li style="border-left-color: #e53e3e;">❌ DO NOT proceed with this reordering</li>
+                                <li style="border-left-color: #e53e3e;">⚠️ Critical dependency violations detected</li>
+                                <li style="border-left-color: #e53e3e;">⚠️ Review and reorder atoms to resolve violations</li>
+                            ` : riskLevel === 'MEDIUM' ? `
+                                <li style="border-left-color: #f59e0b;">⚠️ Proceed with caution</li>
+                                <li style="border-left-color: #f59e0b;">⚠️ Test all affected atoms thoroughly</li>
+                                <li style="border-left-color: #f59e0b;">⚠️ Review customer experience implications</li>
+                            ` : `
+                                <li style="border-left-color: #38a169;">✅ Safe to proceed with this reordering</li>
+                                <li style="border-left-color: #38a169;">✅ All dependencies maintained correctly</li>
+                                <li style="border-left-color: #38a169;">✅ Update documentation with new sequence</li>
+                            `}
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px;">
+                        <button onclick="resetSequence(); currentView='swimlane'; renderCurrentView();"
+                                style="padding: 10px 20px; background: #dc2626; color: white; border: none; border-radius: 6px; cursor: pointer; margin-right: 10px;">
+                            Reset Changes
+                        </button>
+                        <button onclick="currentView='swimlane'; renderCurrentView();"
+                                style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Back to Swimlane
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // What-If Mode Functions
+        let draggedAtomId = null;
+
+        function toggleWhatIfMode() {
+            whatIfMode = !whatIfMode;
+            if (!whatIfMode) {
+                modifiedSequence = null; // Reset when disabling
+            }
+            renderCurrentView();
+        }
+
+        function resetSequence() {
+            modifiedSequence = null;
+            renderCurrentView();
+        }
+
+        function analyzeCurrentSequence() {
+            currentView = 'impact';
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === 'impact');
+            });
+            renderCurrentView();
+        }
+
+        function detectDependencyViolations(atoms) {
+            const violations = [];
+            const atomPositions = new Map();
+
+            // Build position map
+            atoms.forEach((atom, index) => {
+                atomPositions.set(atom.id, index);
+            });
+
+            // Check each atom's dependencies
+            atoms.forEach(atom => {
+                const currentPos = atomPositions.get(atom.id);
+
+                // Check 'requires' dependencies
+                if (atom.dependencies && atom.dependencies.requires) {
+                    atom.dependencies.requires.forEach(requiredId => {
+                        const requiredPos = atomPositions.get(requiredId);
+                        if (requiredPos !== undefined && requiredPos > currentPos) {
+                            violations.push(
+                                `"${atom.name}" (${atom.id}) requires "${allAtoms.find(a => a.id === requiredId)?.name}" but it comes after`
+                            );
+                        }
+                    });
+                }
+            });
+
+            return violations;
+        }
+
+        function enableDragAndDrop() {
+            const cards = document.querySelectorAll('.atom-card[draggable="true"]');
+            cards.forEach(card => {
+                card.addEventListener('dragstart', (e) => handleDragStart(e, card.dataset.atomId));
+                card.addEventListener('dragover', handleDragOver);
+                card.addEventListener('drop', (e) => handleDrop(e, card.dataset.atomId));
+                card.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        function handleDragStart(event, atomId) {
+            draggedAtomId = atomId;
+            event.target.style.opacity = '0.5';
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/html', event.target.innerHTML);
+        }
+
+        function handleDragOver(event) {
+            if (event.preventDefault) {
+                event.preventDefault();
+            }
+            event.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDrop(event, targetAtomId) {
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+            event.preventDefault();
+
+            if (draggedAtomId && draggedAtomId !== targetAtomId) {
+                // Get current working sequence
+                const workingAtoms = modifiedSequence || [...allAtoms.filter(atom => {
+                    const stageMatch = currentFilter === 'all' || atom.stage === currentFilter;
+                    const phaseMatch = currentPhase === 'all' || atom.phase === currentPhase;
+                    return stageMatch && phaseMatch;
+                })];
+
+                // Find indices
+                const draggedIndex = workingAtoms.findIndex(a => a.id === draggedAtomId);
+                const targetIndex = workingAtoms.findIndex(a => a.id === targetAtomId);
+
+                if (draggedIndex !== -1 && targetIndex !== -1) {
+                    // Reorder
+                    const [draggedAtom] = workingAtoms.splice(draggedIndex, 1);
+                    workingAtoms.splice(targetIndex, 0, draggedAtom);
+
+                    modifiedSequence = workingAtoms;
+                    renderCurrentView();
+                }
+            }
+
+            return false;
+        }
+
+        function handleDragEnd(event) {
+            event.target.style.opacity = '';
+            draggedAtomId = null;
         }
 
         // Find downstream atoms
