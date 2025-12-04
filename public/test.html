@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Test</title>
+</head>
+<body>
+    <h1>Atom Data Test</h1>
+    <div id="result"></div>
+    <script>
+        async function test() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Loading...';
+
+            try {
+                // Try different paths
+                const paths = [
+                    '/public/data/atoms.json',
+                    '/data/atoms.json',
+                    'public/data/atoms.json',
+                    'data/atoms.json'
+                ];
+
+                for (const path of paths) {
+                    result.innerHTML += `<p>Trying: ${path}</p>`;
+                    try {
+                        const response = await fetch(path);
+                        if (response.ok) {
+                            const data = await response.json();
+                            result.innerHTML += `<p style="color: green;">✅ SUCCESS: ${path}<br>Loaded ${data.atoms.length} atoms</p>`;
+                            result.innerHTML += `<pre>${JSON.stringify(data.atoms[0], null, 2).substring(0, 500)}...</pre>`;
+                            break;
+                        } else {
+                            result.innerHTML += `<p style="color: red;">❌ ${path}: ${response.status}</p>`;
+                        }
+                    } catch (e) {
+                        result.innerHTML += `<p style="color: red;">❌ ${path}: ${e.message}</p>`;
+                    }
+                }
+            } catch (error) {
+                result.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+
+        test();
+    </script>
+</body>
+</html>
