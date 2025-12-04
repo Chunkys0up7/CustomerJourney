@@ -21,8 +21,8 @@ const server = http.createServer((req, res) => {
   console.log(`${req.method} ${req.url}`);
 
   let filePath = '.' + req.url;
-  if (filePath === './') {
-    filePath = './public/journey-dashboard.html';
+  if (filePath === './' || filePath === './index.html') {
+    filePath = './public/index.html';
   }
 
   const extname = String(path.extname(filePath)).toLowerCase();
