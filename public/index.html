@@ -394,6 +394,103 @@
             display: none;
         }
 
+        /* Network Graph View */
+        #network-graph {
+            width: 100%;
+            height: 800px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .graph-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .graph-controls button {
+            padding: 8px 16px;
+            border: none;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .graph-controls button:hover {
+            background: #5568d3;
+        }
+
+        .graph-legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        .network-node {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .network-node:hover {
+            stroke-width: 3px;
+        }
+
+        .network-link {
+            stroke: #999;
+            stroke-opacity: 0.6;
+            stroke-width: 1.5px;
+        }
+
+        .network-label {
+            font-size: 11px;
+            pointer-events: none;
+            fill: #2d3748;
+            text-anchor: middle;
+        }
+
         /* Detail Panel */
         .detail-panel {
             position: fixed;
@@ -624,6 +721,7 @@
             <div>
                 <!-- View Tabs -->
                 <div class="view-tabs">
+                    <button class="tab-btn" data-view="network">🕸️ Network Graph</button>
                     <button class="tab-btn active" data-view="swimlane">🏊 Swimlane View</button>
                     <button class="tab-btn" data-view="timeline">📅 Timeline View</button>
                     <button class="tab-btn" data-view="impact">⚠️ Impact Analysis</button>
@@ -657,7 +755,7 @@
         // Global state
         let allAtoms = [];
         let allModules = [];
-        let currentView = 'swimlane';
+        let currentView = 'network';
         let currentFilter = 'all';
         let currentPhase = 'all';
         let selectedAtom = null;
@@ -767,7 +865,9 @@
                 return stageMatch && phaseMatch;
             });
 
-            if (currentView === 'swimlane') {
+            if (currentView === 'network') {
+                renderNetworkGraph(filteredAtoms);
+            } else if (currentView === 'swimlane') {
                 renderSwimlaneView(filteredAtoms);
             } else if (currentView === 'timeline') {
                 renderTimelineView(filteredAtoms);
@@ -775,6 +875,255 @@
                 renderImpactView(filteredAtoms);
             }
         }
+
+        // Render Network Graph View
+        function renderNetworkGraph(atoms) {
+            if (atoms.length === 0) {
+                document.getElementById('view-content').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🕸️</div>
+                        <h3>No Atoms to Display</h3>
+                        <p>Select a phase or adjust filters to see the network graph</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Create graph container
+            document.getElementById('view-content').innerHTML = `
+                <div style="position: relative;">
+                    <div class="graph-legend">
+                        <div class="legend-title">Atom Stages</div>
+                        <div class="legend-items">
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: #4ade80;"></div>
+                                <span>Front-Stage</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: #3b82f6;"></div>
+                                <span>Back-Stage</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background: #f59e0b;"></div>
+                                <span>System</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graph-controls">
+                        <button onclick="resetGraphZoom()">Reset View</button>
+                        <button onclick="centerGraph()">Center</button>
+                    </div>
+                    <svg id="network-graph"></svg>
+                </div>
+            `;
+
+            // Build graph data
+            const nodes = atoms.map(atom => ({
+                id: atom.id,
+                name: atom.name,
+                stage: atom.stage,
+                phase: atom.phase,
+                category: atom.category,
+                actor: atom.actor
+            }));
+
+            const links = [];
+            atoms.forEach(atom => {
+                if (atom.dependencies && atom.dependencies.enables) {
+                    atom.dependencies.enables.forEach(targetId => {
+                        if (atoms.find(a => a.id === targetId)) {
+                            links.push({
+                                source: atom.id,
+                                target: targetId,
+                                type: 'enables'
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Color mapping
+            const stageColors = {
+                front_stage: '#4ade80',
+                back_stage: '#3b82f6',
+                system: '#f59e0b'
+            };
+
+            // SVG setup
+            const svg = d3.select('#network-graph');
+            const containerWidth = document.getElementById('view-content').clientWidth;
+            const width = containerWidth;
+            const height = 800;
+
+            svg.attr('width', width).attr('height', height);
+            svg.selectAll('*').remove();
+
+            const g = svg.append('g');
+
+            // Add zoom behavior
+            const zoom = d3.zoom()
+                .scaleExtent([0.1, 4])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+
+            // Store zoom for reset functions
+            window.graphZoom = zoom;
+            window.graphSvg = svg;
+
+            // Arrow marker
+            svg.append('defs').append('marker')
+                .attr('id', 'arrowhead')
+                .attr('viewBox', '-0 -5 10 10')
+                .attr('refX', 20)
+                .attr('refY', 0)
+                .attr('orient', 'auto')
+                .attr('markerWidth', 8)
+                .attr('markerHeight', 8)
+                .append('svg:path')
+                .attr('d', 'M 0,-5 L 10,0 L 0,5')
+                .attr('fill', '#999');
+
+            // Force simulation
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+                .force('charge', d3.forceManyBody().strength(-300))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(30));
+
+            // Draw links
+            const link = g.append('g')
+                .selectAll('line')
+                .data(links)
+                .enter().append('line')
+                .attr('class', 'network-link')
+                .attr('marker-end', 'url(#arrowhead)');
+
+            // Draw nodes
+            const node = g.append('g')
+                .selectAll('circle')
+                .data(nodes)
+                .enter().append('circle')
+                .attr('class', 'network-node')
+                .attr('r', 12)
+                .attr('fill', d => stageColors[d.stage] || '#cbd5e0')
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2)
+                .on('click', (event, d) => {
+                    event.stopPropagation();
+                    showAtomDetails(d.id);
+                })
+                .on('mouseover', function(event, d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('r', 16)
+                        .attr('stroke-width', 3);
+
+                    // Show tooltip
+                    const tooltip = d3.select('body').append('div')
+                        .attr('class', 'graph-tooltip')
+                        .style('position', 'absolute')
+                        .style('background', 'white')
+                        .style('padding', '10px')
+                        .style('border-radius', '8px')
+                        .style('box-shadow', '0 2px 8px rgba(0,0,0,0.2)')
+                        .style('pointer-events', 'none')
+                        .style('z-index', 1000)
+                        .style('left', (event.pageX + 10) + 'px')
+                        .style('top', (event.pageY - 10) + 'px')
+                        .html(`
+                            <div style="font-weight: 600; margin-bottom: 5px;">${d.name}</div>
+                            <div style="font-size: 12px; color: #666;">
+                                <div>ID: ${d.id}</div>
+                                <div>Stage: ${d.stage}</div>
+                                <div>Phase: ${d.phase}</div>
+                                <div>Actor: ${d.actor}</div>
+                            </div>
+                        `);
+                })
+                .on('mouseout', function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('r', 12)
+                        .attr('stroke-width', 2);
+
+                    d3.selectAll('.graph-tooltip').remove();
+                })
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            // Add labels (show only for important nodes to avoid clutter)
+            const label = g.append('g')
+                .selectAll('text')
+                .data(nodes.filter((d, i) => i < 30 || d.category === 'decision_point')) // Show labels for first 30 or decision points
+                .enter().append('text')
+                .attr('class', 'network-label')
+                .attr('dy', 25)
+                .text(d => {
+                    const words = d.name.split(' ');
+                    return words.length > 2 ? words.slice(0, 2).join(' ') + '...' : d.name;
+                });
+
+            // Update positions on simulation tick
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
+
+                label
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y);
+            });
+
+            // Drag functions
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        }
+
+        // Reset graph zoom
+        window.resetGraphZoom = function() {
+            if (window.graphSvg && window.graphZoom) {
+                window.graphSvg.transition().duration(750)
+                    .call(window.graphZoom.transform, d3.zoomIdentity);
+            }
+        };
+
+        window.centerGraph = function() {
+            if (window.graphSvg && window.graphZoom) {
+                const svg = window.graphSvg;
+                const width = +svg.attr('width');
+                const height = +svg.attr('height');
+                svg.transition().duration(750)
+                    .call(window.graphZoom.transform,
+                        d3.zoomIdentity.translate(width / 2, height / 2).scale(1));
+            }
+        };
 
         // Render Swimlane View
         function renderSwimlaneView(atoms) {
